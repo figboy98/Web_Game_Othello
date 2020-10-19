@@ -2,13 +2,31 @@
     width: 500px;
     display: flex;
     flex-wrap: wrap;
-    background-color: grey;
+    margin: auto;
 }
 .cell{
     border-style: solid;
     width:  50px;
     height: 50px;
     background-color:white;
-    
-    
+
+}
+.black{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    background-color: black;
+    margin-left:auto;
+    margin-right: auto;
+
+}    
+.white{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    background-color: grey;
+    margin-left:auto;
+    margin-right: auto;
 }
