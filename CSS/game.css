@@ -1,0 +1,5 @@
+div.overlay[id="ai-page"], div[id="human-page"].overlay{
+    background-color: rgb(216, 169, 27);
+    background-color: rgba(216, 169, 27, 0.877);
+
+}
