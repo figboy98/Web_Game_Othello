@@ -1,33 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
     <head>
-        <script src="scripts/gameBoardGenerator.js">
-        </script>
-        <link rel="stylesheet" href="style.css"> 
-        
+    <meta charset="UTF-8">
 
+
+    <link rel="stylesheet" href="CSS/main.css" type="text/css">
+    <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
+    <link rel="stylesheet" href="CSS/versus.css" type="text/css">
+     <link rel="stylesheet" href="CSS/game.css" type="text/css">
+
+
+     <title>Othello</title>
     </head>
-
     <body>
-        <div id="gameBoard"> </div>
 
+    	<div class="page-container">
+            <div class="content-wrap">
+            	<header class="navbar" style="z-index: 1">
+                            <img src="img/logo.png" alt="logo" class="logo" width="8%">
+                            <div><h1>&nbsp;&nbsp;&nbsp;&nbsp;Othello</h1></div>
+                            <nav>
+                                <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>  
+                            </nav>
+                        </header>
+						</div>
+						</div>
+<!-----------------------Intruçoes----------------------------->
+ <div id="instruction-page" class="overlay">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('instruction-page')">&times;</a>
+                <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Tabulerio</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_1.png">
+                            <p>&#9642;Tabuleiro quadrado,contendo uma grelha com 8 linhas por 8 colunas;</p>
+                            <p><b>&#9642;Não </b> xadrezado, contrariamente às damas ou ao xadrez</p>
+                            <p>&#9642;O fundo geralmente é verde.</p>
+                           
+                        </div>
+                    </div>
+                </div><br>
+                <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Peças/Discos</b></h1></button>
+                        <div class="ov-content-collapsible">
+                           <p>&#9642;As peças denominam-se <b>discos</b>;</p>
+                           <p>&#9642;São circulares;</p>
+                           <p>&#9642;Com 2 face de diferentes tonalidades: </p> 
+                             <p> &#9642;lado claro  &#9675;
+                             </p> 
+                              <p> &#9642;lado escuro  &#9679;
+                             </p> 
+                             
+                        </div>
+                    </div>
+                </div><br>
+                 <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Início do jogo</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_2.png">
+                           <p>&#9642;Na posição inicial há 4 peças: 2 de cada uma das 2 tonalidades (claro e escuro);</p>
+                           <p>&#9642;Colocadas nas casas centrais;</p>
+                           <p>&#9642;Peças da mesma tonalidade ficam em diagonal;</p> 
+                            <p>&#9642;As peças escuras jogam primeiro.</p> 
+                             
+                        </div>
+                    </div>
+                </div><br>
+                 <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Jogar I</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_3.png">
+                           <p>&#9642;Durante o jogo os jogadores jogam alternadamente;</p>
+                           <p>&#9642;Colocam uma peça da sua cor numa casa livre;</p>
+                           <p>&#9642;Se na mesma linha, coluna ou diagonal da peça jogada, peças da cor contrária viram para a cor do jogador, <b>só pode ser jogada uma peça se for virada alguma</b>;</p> 
+                 
+                        </div>
+                    </div>
+                </div><br>
+                 <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Jogar II</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_4.png">
+                           <p>&#9642;A peça colocada pode virar várias peças do adversário que estão na mesma linha coluna ou diagonal da peça jogada, desde que:</p>
+                           <p> -num dos extremos esteja a peça jogada</p>
+                           <p> -e no outro esteja uma peça do mesmo tom;</p> 
+                        </div>
+                    </div>
+                </div><br>
+                 <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Jogar III</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_5.png">
+                           <p>&#9642;Podem ser viradas várias peças consecutivas do adversário, na mesma linha, coluna ou diagonal. Desde que delimitadas pela peça jogada e outra do mesmo tom (do jogador)</p>
+                          
+                        </div>
+                    </div>
+                </div><br>
+			<div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Passar</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_6.png">
+                           <p>&#9642;Na sua vez, o jogador só pode jogar se virar peças;</p>
+                           <p>&#9642;Caso conrário não poderá jogar e terá de passar a jogada;</p>
+                           <p>Mas só pode passar se não tiver jogada possível.</p>
+                          
+                        </div>
+                    </div>
+                </div><br>
+                <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Terminar</b></h1></button>
+                        <div class="ov-content-collapsible">
+                        	<img src = "img/t_7.png">
+                           <p>&#9642;O jogo termina quando nenhum jogador pode jogar, geralmente quando o tabuleiro está todo preenchido. Mas não necessariamente (ver exemplo da imagem);</p>
+                           <p><b>Ganha o jogador com maior número de peças.</b></p>
+                          
+                        </div>
+                    </div>
+                </div><br>
 
-
-    </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		<script src="Script/NavMenus.js"></script>
+		<script src="Script/collapsible.js"></script>
+		</body>
 </html>
+
