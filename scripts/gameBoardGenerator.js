@@ -281,34 +281,103 @@ class GameBoard{
         this.nextAvailablePositions = positions;
 
     }
-    lookAux(i,j,oponentColor){
-        let color = this.gameData[i,j];
-        if(color==undefined){
-            return -1;
-        }
-        else if(color == oponentColor){
-            return 1;
-        }
-        else if(color !=oponentColor){
+    isInsideLimits(i,j){
+        if(i>BOTTOM || i<TOP) return false;
+        if(j<LEFT || j>RIGHT) return false;
+        return true;
+    }
+    /* Function to determine if we increase/decrease the X cordinate or the Y cordinate
+    or both in order to decide the direction to look for disks
+    */
+
+    decideDirection(direction){
+        let opI,opJ;
+
+        switch(direction){
+            case FORWARD:
+                opI=0;
+                opJ=1;
+                break;
+            case BACKWARDS:
+                opI=0;
+                opJ=-1;
+                break;
+            case UP:
+                opI=-1;
+                opJ=0;
+                break;
+            case DOWN:
+                opI=1;
+                opJ=0;
+                break;
+            case UPPER_LEFT_DIAGONAL:
+                opI=-1;
+                opJ=-1;
+                break;
+            case DOWN_LEFT_DIAGONAL:
+                opI=1;
+                opJ=-1;
+                break;
             
+            case UPPER_RIGHT_DIAGONAL:
+                opI=-1;
+                opJ=1;
+                break;
+            case DOWN_RIGHT_DIAGONAL:
+                opI=1;
+                opJ=1;
+                break;
+        }
+
+        let moves = [opI,opJ];
+        return moves;
+
+    }
+    lookAux(i,j, oponentColor){
+        let moves = this.decideDirection(direction);
+        let opI = moves[0];
+        let opJ= moves[1];
+      
+        while(true){
+            if(!isInsideLimits(i,j)){
+                return counter;
+            }
+            color = this.gameData[i][j];
+
+            if(color == undefine){
+                break;
+            }
+            else if(color = oponentColor){
+                counter ++;
+            }
+
+            else if(color !=oponentColor){
+                break;
+            }
+
+            if(moveI){
+                i+=opI;
+            }
+            else if(moveJ){
+                j+=opJ;
+            }
+        }
+
+        if(moveI){
+            let nextI = originalI + (opJ)*(-1)*counter;
+            let nextJ = orignalJ;
+            let nextCords = new nextPositions(nextI,nextJ);
         }
     }
 
-    lookAround(i, j ,oponentColor){
+   lookAround(i, j ,oponentColor){
         let positions = [];
         let counter=0;
         //Look forward
-       
-       for(var k=j; k<=RIGHT; k++){
-           while(temp = this.lookAux(i,k) !=-1){
-               counter+=
-           }
 
-       }
-    }
-       
-       
-        /* for(var k=j; k<=RIGHT; k++){
+
+    } 
+         for(var k=j; k<=RIGHT; k++){
             let color = this.gameData[i][k];
             if(color == undefined) break;
             else if (color == oponentColor) counter++;
@@ -321,7 +390,7 @@ class GameBoard{
                 if(this.gameData[nextX][nextY]==undefined)
                     positions.push(nextAvailable);
                 break;
-            } */
+            } 
         }
         counter=0;
         //Look backwards
