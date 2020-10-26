@@ -16,6 +16,7 @@
  let DOWN_LEFT_DIAGONAL = "dld";
  let UPPER_RIGHT_DIAGONAL = "urd";
  let DOWN_RIGHT_DIAGONAL = "drd";
+ let DONT_MOVE = "dontMove";
  
  /*class to hold DOM information about each cellDOM in the game board */
  class Cell{
@@ -295,20 +296,20 @@ class GameBoard{
 
         switch(direction){
             case FORWARD:
-                opI=0;
+                opI=DONT_MOVE;
                 opJ=1;
                 break;
             case BACKWARDS:
-                opI=0;
+                opI=DONT_MOVE;
                 opJ=-1;
                 break;
             case UP:
                 opI=-1;
-                opJ=0;
+                opJ=DONT_MOVE;
                 break;
             case DOWN:
                 opI=1;
-                opJ=0;
+                opJ=DONT_MOVE;
                 break;
             case UPPER_LEFT_DIAGONAL:
                 opI=-1;
@@ -333,50 +334,82 @@ class GameBoard{
         return moves;
 
     }
-    lookAux(i,j, oponentColor){
+    lookAux(i,j,direction,oponentColor){
+        let k=i;
+        let l=j;
         let moves = this.decideDirection(direction);
+        let nextI,nextJ,color,counter=0,nextCords;
+        let foundOponent = false,foundCurr=false,invalid=false;
         let opI = moves[0];
         let opJ= moves[1];
       
         while(true){
-            if(!isInsideLimits(i,j)){
-                return counter;
-            }
-            color = this.gameData[i][j];
-
-            if(color == undefine){
+            if(!this.isInsideLimits(k,l)){
+                invalid=true;
                 break;
             }
-            else if(color = oponentColor){
-                counter ++;
-            }
+            color = this.gameData[k][l];
 
-            else if(color !=oponentColor){
+            counter++;
+            if(color == undefined){
                 break;
             }
-
-            if(moveI){
-                i+=opI;
+            else if(color == oponentColor){
+                foundOponent = true;
             }
-            else if(moveJ){
-                j+=opJ;
+            else if(color != oponentColor && foundOponent){
+                foundCurr=true;
+            }
+
+
+            if(opI!=DONT_MOVE){
+                k+=opI;
+            }
+            if(opJ !=DONT_MOVE){
+                l+=opJ;
             }
         }
-
-        if(moveI){
-            let nextI = originalI + (opJ)*(-1)*counter;
-            let nextJ = orignalJ;
-            let nextCords = new nextPositions(nextI,nextJ);
+    if(foundOponent && foundCurr && !invalid){
+        if(opI != DONT_MOVE){
+            nextI = k + (opI*-1)*counter;
+            nextJ = j;
         }
+        else if(opJ != DONT_MOVE){
+             nextI= i;
+             nextJ = l + (opJ*-1)*counter;
+        }
+         nextCords = new nextPositions(nextI,nextJ,direction);
+
+    }
+    else{
+         nextCords = new nextPositions(null,null,null);
     }
 
+    return nextCords;
+
+    }
+    isEquals(a, b){
+        if(a.i != b.i || a.j != b.j || a.direction != b.direction){
+            return false;
+        }
+        return true;
+    }
    lookAround(i, j ,oponentColor){
+        let moves = [FORWARD,BACKWARDS,UP,DOWN,UPPER_RIGHT_DIAGONAL,DOWN_RIGHT_DIAGONAL,UPPER_RIGHT_DIAGONAL,DOWN_LEFT_DIAGONAL];
         let positions = [];
-        let counter=0;
+        let invalid = new nextPositions(null,null,null);
+
+        for(var k=0; k<moves.length; k++){
+            let temp = this.lookAux(i,j,moves[k],oponentColor);
+            if(!this.isEquals(temp,invalid)){
+                positions.push(temp);
+            }
+        }
+        return positions;
+       
+       /*
         //Look forward
 
-
-    } 
          for(var k=j; k<=RIGHT; k++){
             let color = this.gameData[i][k];
             if(color == undefined) break;
@@ -545,8 +578,8 @@ class GameBoard{
         return positions;
 
 
+    } */
     }
-   
 };
 
 class GameController{
