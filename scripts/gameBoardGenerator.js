@@ -116,6 +116,7 @@ class GameBoard{
             let y = this.nextAvailablePositions[i].y;
             if(x != currX || y!= currY){
                 this.gameView[x][y].addDisk("NotAvailable");
+                this.gameView[x][y].clickable=false;
             }
         }
 
@@ -280,12 +281,34 @@ class GameBoard{
         this.nextAvailablePositions = positions;
 
     }
+    lookAux(i,j,oponentColor){
+        let color = this.gameData[i,j];
+        if(color==undefined){
+            return -1;
+        }
+        else if(color == oponentColor){
+            return 1;
+        }
+        else if(color !=oponentColor){
+            
+        }
+    }
 
     lookAround(i, j ,oponentColor){
         let positions = [];
         let counter=0;
         //Look forward
-        for(var k=j; k<=RIGHT; k++){
+       
+       for(var k=j; k<=RIGHT; k++){
+           while(temp = this.lookAux(i,k) !=-1){
+               counter+=
+           }
+
+       }
+    }
+       
+       
+        /* for(var k=j; k<=RIGHT; k++){
             let color = this.gameData[i][k];
             if(color == undefined) break;
             else if (color == oponentColor) counter++;
@@ -298,7 +321,7 @@ class GameBoard{
                 if(this.gameData[nextX][nextY]==undefined)
                     positions.push(nextAvailable);
                 break;
-            }
+            } */
         }
         counter=0;
         //Look backwards
