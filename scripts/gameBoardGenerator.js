@@ -3,8 +3,8 @@
  let BOTTOM = 5;
  let RIGHT = 5;
  let TOP = 2;
- let NEXT_PLAYER = "black";
- let CURR_PLAYER = "white"
+ let NEXT_PLAYER = "white";
+ let CURR_PLAYER = "black";
  let BLACK_DISK = "black";
  let WHITE_DISK = "white";
  let AVAILABLE_DISK = "available"
@@ -86,10 +86,23 @@ class GameBoard{
     }
 
     initBoard(){
+
+        /*this.addDisk(3,2,WHITE_DISK);
+        this.addDisk(3,3,BLACK_DISK);
+        this.addDisk(3,4,WHITE_DISK);
+        this.addDisk(2,2,WHITE_DISK);
+        this.addDisk(2,3,WHITE_DISK);
+        this.addDisk(2,4,WHITE_DISK);
+        this.addDisk(4,3,WHITE_DISK);
+        this.addDisk(4,4,WHITE_DISK);
+        this.addDisk(3,1,WHITE_DISK);
+        this.addDisk(1,5,WHITE_DISK);
+        this.addDisk(4,2,WHITE_DISK);
+        this.addDisk(5,3,WHITE_DISK); */
         this.addDisk(3,3,WHITE_DISK);
         this.addDisk(4,4,WHITE_DISK);
         this.addDisk(3,4,BLACK_DISK);
-        this.addDisk(4,3,BLACK_DISK);
+        this.addDisk(4,3,BLACK_DISK); 
         this.getNextAvailablePosition(CURR_PLAYER);
         this.displayNextAvailable();
         
@@ -367,20 +380,9 @@ class GameBoard{
                 l+=opJ;
             }
         }
+        
     if(foundOponent && foundCurr && !invalid){
-        if (opI != DONT_MOVE && opJ !=DONT_MOVE){
-            nextI = k + (opI*-1)*counter;
-            nextJ = l + (opJ*-1)*counter;
-        }
-       else  if(opI != DONT_MOVE){
-            nextI = k + (opI*-1)*counter;
-            nextJ = j;
-        }
-        else if(opJ != DONT_MOVE){
-             nextI= i;
-             nextJ = l + (opJ*-1)*counter;
-        }
-         nextCords = new nextPositions(nextI,nextJ,direction);
+        nextCords = this.makeNextAvailablePosition(k,l,counter,opI,opJ,direction);
 
     }
     else{
@@ -390,6 +392,48 @@ class GameBoard{
     return nextCords;
 
     }
+
+    makeNextAvailablePosition(k,l,counter,opI,opJ,direction){
+        let nextI, nextJ;
+        let nextCords;
+        let invalid = false;
+        while(true){
+            if (opI != DONT_MOVE && opJ !=DONT_MOVE){
+                nextI = k + (opI*-1)*counter;
+                nextJ = l + (opJ*-1)*counter;
+            }
+            else  if(opI != DONT_MOVE){
+                nextI = k + (opI*-1)*counter;
+                nextJ = l;
+            }
+            else if(opJ != DONT_MOVE){
+                 nextI= k;
+                 nextJ = l + (opJ*-1)*counter;
+            }
+            if(this.gameData[nextI][nextJ]== undefined){
+                break;
+            }
+            else if(!this.isInsideLimits(nextI,nextJ)){
+                invalid=true;
+                break;
+            }
+            else if(this.gameData[nextI][nextJ] !=undefined){
+                counter++;
+            }
+        } 
+
+        if(!invalid){
+            nextCords = new nextPositions(nextI,nextJ,direction);
+        }
+        else{
+
+            nextCords = new nextPositions(null,null,null);
+        }
+        
+        return nextCords;
+    }
+
+
     isEquals(a, b){
         if(a.i != b.i || a.j != b.j || a.direction != b.direction){
             return false;
