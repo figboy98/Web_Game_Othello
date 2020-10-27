@@ -98,10 +98,8 @@ class GameBoard{
 
     displayNextAvailable(){
         let size = this.nextAvailablePositions.length;
-        if(size==0){
-            alert("display");
-        }
         for(var i=0; i<size; i++){
+            
             let k = this.nextAvailablePositions[i].x;
             let j = this.nextAvailablePositions[i].y;
             let cell = this.gameView[k][j];
@@ -370,7 +368,11 @@ class GameBoard{
             }
         }
     if(foundOponent && foundCurr && !invalid){
-        if(opI != DONT_MOVE){
+        if (opI != DONT_MOVE && opJ !=DONT_MOVE){
+            nextI = k + (opI*-1)*counter;
+            nextJ = l + (opJ*-1)*counter;
+        }
+       else  if(opI != DONT_MOVE){
             nextI = k + (opI*-1)*counter;
             nextJ = j;
         }
@@ -395,7 +397,7 @@ class GameBoard{
         return true;
     }
    lookAround(i, j ,oponentColor){
-        let moves = [FORWARD,BACKWARDS,UP,DOWN,UPPER_RIGHT_DIAGONAL,DOWN_RIGHT_DIAGONAL,UPPER_RIGHT_DIAGONAL,DOWN_LEFT_DIAGONAL];
+        let moves = [FORWARD,BACKWARDS,UP,DOWN,UPPER_RIGHT_DIAGONAL,DOWN_RIGHT_DIAGONAL,UPPER_LEFT_DIAGONAL,DOWN_LEFT_DIAGONAL];
         let positions = [];
         let invalid = new nextPositions(null,null,null);
 
@@ -424,162 +426,10 @@ class GameBoard{
                     positions.push(nextAvailable);
                 break;
             } 
-        }
-        counter=0;
-        //Look backwards
-        for(var k = j; k>=LEFT; k--){
-            let color = this.gameData[i][k];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = i;
-                let nextY = k + counter;
-                let nextAvailable = new nextPositions(nextX,nextY,BACKWARDS);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-        }
-        counter=0;
-
-        //Look up
-        for(var k=i; k>=TOP; k--){
-            let color = this.gameData[k][j];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k + counter;
-                let nextY = j;
-                let nextAvailable = new nextPositions(nextX,nextY,UP);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-        }
-        counter =0;
-        //Look down
-        for(var k=i; k<=BOTTOM; k++){
-            let color = this.gameData[k][j];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k - counter;
-                let nextY = j;
-                let nextAvailable = new nextPositions(nextX,nextY,DOWN);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-        }
-        counter=0;
-        var k=i;
-        var l =j;
-        //look Left Upper Diagonal
-        while(true){
-            if(k <TOP || l <LEFT ) break;
-            let color= this.gameData[k][l];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k + counter;
-                let nextY = l + counter;
-                let nextAvailable = new nextPositions(nextX,nextY,UPPER_LEFT_DIAGONAL);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-            k--;
-            l--;
-
-        }
-        counter=0;
-        //Look Left Down Diagonal
-        var k=i;
-        var l=j;
-        while(true){
-            
-            if(k > BOTTOM || l < LEFT ) break;
-            let color= this.gameData[k][l];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k - counter;
-                let nextY = l + counter;
-                let nextAvailable = new nextPositions(nextX,nextY,DOWN_LEFT_DIAGONAL);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-            k++;
-            l--;
-
-        }
-        counter=0;
-        //Look Right Upper Diagonal
-        var k=i;
-        var l=j;
-        while(true){
-            
-            if(k < TOP || l >RIGHT ) break;
-            let color= this.gameData[k][l];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k + counter;
-                let nextY = l - counter;
-                let nextAvailable = new nextPositions(nextX,nextY,UPPER_RIGHT_DIAGONAL);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-            k--;
-            l++;
-
-        }
-        counter=0;
-        //Look Right Down Diagonal
-        var k=i;
-        var l=j;
-        while(true){
-           
-            if(k >BOTTOM || l > RIGHT ) break;
-            let color= this.gameData[k][l];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++;
-                let nextX = k - counter;
-                let nextY = l - counter;
-                let nextAvailable = new nextPositions(nextX,nextY,DOWN_RIGHT_DIAGONAL);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            }
-            k++;
-            l++;
-
-        }
-        return positions;
-
-
-    } */
+        } */
+        
     }
+    
 };
 
 class GameController{
