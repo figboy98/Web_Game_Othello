@@ -2,7 +2,7 @@
  let LEFT = 2;
  let BOTTOM = 5;
  let RIGHT = 5;
- let TOP = 2;
+ let TOP = 2; 
  let NEXT_PLAYER = "white";
  let CURR_PLAYER = "black";
  let BLACK_DISK = "black";
@@ -45,10 +45,12 @@
  };
 
  class nextPositions{
-     constructor(x,y,direction){
+     constructor(x,y,endX, endY,direction){
          this.direction = direction;
          this.x=x;
          this.y =y;
+         this.endX = endX;
+         this.endY = endY;
      }
  }
  
@@ -85,34 +87,26 @@ class GameBoard{
         }
     }
 
-    initBoard(){
-
-        /*this.addDisk(3,2,WHITE_DISK);
-        this.addDisk(3,3,BLACK_DISK);
-        this.addDisk(3,4,WHITE_DISK);
-        this.addDisk(2,2,WHITE_DISK);
-        this.addDisk(2,3,WHITE_DISK);
-        this.addDisk(2,4,WHITE_DISK);
-        this.addDisk(4,3,WHITE_DISK);
-        this.addDisk(4,4,WHITE_DISK);
-        this.addDisk(3,1,WHITE_DISK);
-        this.addDisk(1,5,WHITE_DISK);
-        this.addDisk(4,2,WHITE_DISK);
-        this.addDisk(5,3,WHITE_DISK); */
+    initBoard(){        
         this.addDisk(3,3,WHITE_DISK);
         this.addDisk(4,4,WHITE_DISK);
         this.addDisk(3,4,BLACK_DISK);
-        this.addDisk(4,3,BLACK_DISK); 
+        this.addDisk(4,3,BLACK_DISK);
+
+
         this.getNextAvailablePosition(CURR_PLAYER);
-        this.displayNextAvailable();
+        this.displayNextAvailable(); 
         
 
     }
 
     displayNextAvailable(){
         let size = this.nextAvailablePositions.length;
+        if(size==0){
+            alert("empty");
+            return;
+        }
         for(var i=0; i<size; i++){
-            
             let k = this.nextAvailablePositions[i].x;
             let j = this.nextAvailablePositions[i].y;
             let cell = this.gameView[k][j];
@@ -122,7 +116,6 @@ class GameBoard{
     }
     clearAvailablePositions(currX, currY){
         var size = this.nextAvailablePositions.length;
-        if(size==0) alert("clear");
         for(var i=0; i<size;i++){
             let x = this.nextAvailablePositions[i].x;
             let y = this.nextAvailablePositions[i].y;
@@ -140,7 +133,7 @@ class GameBoard{
         let j = cellClicked.y;
 
         if(this.gameView[i][j].clickable){
-            this.addDisk(i,j,CURR_PLAYER);
+           // this.addDisk(i,j,CURR_PLAYER);
             this.turnOponentDisks(i,j);
             this.changePlayerTurn();
             this.clearAvailablePositions(i,j);
@@ -154,98 +147,50 @@ class GameBoard{
         CURR_PLAYER=NEXT_PLAYER;
         NEXT_PLAYER = temp;
     }
-    getNextPosition(i,j){
+    getNextPositions(i,j){
         let size = this.nextAvailablePositions.length;
+        let nextPositions=[];
         for(var k=0; k<size; k++){
             if(this.nextAvailablePositions[k].x == i && this.nextAvailablePositions[k].y == j){
-                return this.nextAvailablePositions[k];
+                nextPositions.push(this.nextAvailablePositions[k]);
             }
         }
+        return nextPositions;
     }
-    //NOTE: ------------------------Change this to a switch---------------------------------------------- 
     
     turnOponentDisks(i,j){
-        let position = this.getNextPosition(i,j);
-        let direction = position.direction;
+       
+        let oponentPositions = this.getNextPositions(i,j);
+        if(oponentPositions.length ==0){
+            alert("empty");
+        }
+        let direction;
+        let moves;
+        let endX,endY,opX,opY,x,y;
+       
+    
+        
+        for(var k=0; k<oponentPositions.length; k++){
+            direction = oponentPositions[k].direction;
+            moves =this.decideDirection(direction);
+            endX = oponentPositions[k].endX;
+            endY = oponentPositions[k].endY;
+            opX = moves[0];
+            opY = moves[1];
+            x = Number(i);
+            y = Number(j);
 
-        if(direction == FORWARD){
-            j++;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-                j++;
+            while(x!=endX || y!=endY){
+                this.addDisk(x,y,CURR_PLAYER);
+                
+                if(opX != DONT_MOVE){
+                    x+=opX;
+                }
+                if(opY != DONT_MOVE){
+                    y+=opY;
+                }
             }
         }
-        if(direction == BACKWARDS){
-            j--;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-
-                j--;
-            }
-        }
-
-        if(direction == UP){
-            i--;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-
-                i--;
-            }
-        }
-
-        if(direction== DOWN){
-            i++;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-
-                i++;
-            }
-        }
-        if(direction == UPPER_LEFT_DIAGONAL){
-            i--;
-            j--;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-                i--;
-                j--;
-            }
-        }
-        if(direction == DOWN_LEFT_DIAGONAL){
-            i++;
-            j--;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-                i++;
-                j--;
-            }
-        }
-        if(direction == UPPER_RIGHT_DIAGONAL){
-            i--;
-            j++;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-                i--;
-                j++;
-            }
-        }
-        if(direction == DOWN_RIGHT_DIAGONAL){
-            i++;
-            j++;
-            while(this.gameData[i][j] !=CURR_PLAYER){
-                this.gameView[i][j].addDisk(CURR_PLAYER);
-                this.gameData[i][j] = CURR_PLAYER;
-                i++;
-                j++;
-            }
-        }
-
     }
 
     addDisk(i,j,color){
@@ -349,7 +294,7 @@ class GameBoard{
         let k=i;
         let l=j;
         let moves = this.decideDirection(direction);
-        let nextI,nextJ,color,counter=0,nextCords;
+        let endX, endY,color,counter=0,nextCords;
         let foundOponent = false,foundCurr=false,invalid=false;
         let opI = moves[0];
         let opJ= moves[1];
@@ -370,6 +315,8 @@ class GameBoard{
             }
             else if(color != oponentColor && foundOponent){
                 foundCurr=true;
+                endX = k;
+                endY = l;
             }
 
 
@@ -382,18 +329,18 @@ class GameBoard{
         }
         
     if(foundOponent && foundCurr && !invalid){
-        nextCords = this.makeNextAvailablePosition(k,l,counter,opI,opJ,direction);
+        nextCords = this.makeNextAvailablePosition(k,l,endX,endY,counter,opI,opJ,direction);
 
     }
     else{
-         nextCords = new nextPositions(null,null,null);
+         nextCords = new nextPositions(null,null,null,null,null);
     }
 
     return nextCords;
 
     }
 
-    makeNextAvailablePosition(k,l,counter,opI,opJ,direction){
+    makeNextAvailablePosition(k,l,endX, endY,counter,opI,opJ,direction){
         let nextI, nextJ;
         let nextCords;
         let invalid = false;
@@ -410,11 +357,12 @@ class GameBoard{
                  nextI= k;
                  nextJ = l + (opJ*-1)*counter;
             }
-            if(this.gameData[nextI][nextJ]== undefined){
+
+            if(!this.isInsideLimits(nextI,nextJ)){
+                invalid=true;
                 break;
             }
-            else if(!this.isInsideLimits(nextI,nextJ)){
-                invalid=true;
+            else if(this.gameData[nextI][nextJ]== undefined){
                 break;
             }
             else if(this.gameData[nextI][nextJ] !=undefined){
@@ -423,11 +371,11 @@ class GameBoard{
         } 
 
         if(!invalid){
-            nextCords = new nextPositions(nextI,nextJ,direction);
+            nextCords = new nextPositions(nextI,nextJ,endX,endY,direction);
         }
         else{
 
-            nextCords = new nextPositions(null,null,null);
+            nextCords = new nextPositions(null,null,null,null,null);
         }
         
         return nextCords;
@@ -435,7 +383,7 @@ class GameBoard{
 
 
     isEquals(a, b){
-        if(a.i != b.i || a.j != b.j || a.direction != b.direction){
+        if(a.i != b.i || a.j != b.j || a.endX!= b.endX || a.endY!=b.endY ||  a.direction != b.direction){
             return false;
         }
         return true;
@@ -443,7 +391,7 @@ class GameBoard{
    lookAround(i, j ,oponentColor){
         let moves = [FORWARD,BACKWARDS,UP,DOWN,UPPER_RIGHT_DIAGONAL,DOWN_RIGHT_DIAGONAL,UPPER_LEFT_DIAGONAL,DOWN_LEFT_DIAGONAL];
         let positions = [];
-        let invalid = new nextPositions(null,null,null);
+        let invalid = new nextPositions(null,null,null,null,null);
 
         for(var k=0; k<moves.length; k++){
             let temp = this.lookAux(i,j,moves[k],oponentColor);
@@ -452,25 +400,6 @@ class GameBoard{
             }
         }
         return positions;
-       
-       /*
-        //Look forward
-
-         for(var k=j; k<=RIGHT; k++){
-            let color = this.gameData[i][k];
-            if(color == undefined) break;
-            else if (color == oponentColor) counter++;
-            else if(color != oponentColor){
-                counter++
-                let nextX = i;
-                let nextY = k - counter;
-                let nextAvailable = new nextPositions(nextX,nextY,FORWARD);
-                if(nextX <0 || nextX >7 || nextY <0 || nextY >7) break;
-                if(this.gameData[nextX][nextY]==undefined)
-                    positions.push(nextAvailable);
-                break;
-            } 
-        } */
         
     }
     
