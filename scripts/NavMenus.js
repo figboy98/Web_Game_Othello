@@ -15,3 +15,18 @@ function closeMenu(element){
     document.body.style.overflowY = 'visible';
     console.log(element + "is now hidden");
 }
+/* Login functions */
+function showLogin(){
+    document.getElementById('login-form').style.display='block';
+}
+function hideLogin(){
+    document.getElementById('login-form').style.display='none';
+}
+
+function showRegister(){
+    hideLogin();
+    document.getElementById('singup-form').style.display='block';
+}
+function hideRegister(){
+    document.getElementById('singup-form').style.display='none';
+}
