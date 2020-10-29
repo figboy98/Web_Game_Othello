@@ -1,8 +1,24 @@
 #gameBoard{
-    width: 500px;
+    
+    padding-top: 100px;
+    display: inline-flex;
+    flex-direction:row;
+    display: block;
+    width: 700px;
     display: flex;
     flex-wrap: wrap;
     margin: auto;
+    
+}
+.state{
+    align-items: center;
+    display: flex;
+    flex-direction:column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100px;
+    height: 300px;
+    padding: 10px;
     
 }
 .cell{

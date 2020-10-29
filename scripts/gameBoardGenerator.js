@@ -18,6 +18,50 @@
  let DOWN_RIGHT_DIAGONAL = "drd";
  let DONT_MOVE = "dontMove";
  
+
+ class State{
+     constructor(diskClass,parent,num){
+         this.state = document.createElement("div");
+         this.cell = document.createElement("div");
+         this.disk = document.createElement("div");
+         this.numDisks = document.createTextNode(num);
+         
+         this.cell.className="cell";
+         this.disk.className=diskClass;
+         
+         this.cell.appendChild(this.disk);
+
+         this.state.appendChild(this.cell);
+         this.state.appendChild(this.numDisks);
+         
+         parent.appendChild(this.state);
+     }
+ };
+
+ class GameState{
+     constructor(parentId){
+        this.blackDisks=2;
+        this.whiteDisks=2;
+        this.emptyCells=60;
+        this.parent = document.getElementById(parentId);
+        this.state = document.createElement("div");
+        this.state.className="state";
+        this.parent.appendChild(this.state);
+
+        this.blackState = new State(BLACK_DISK, this.state,this.blackDisks);
+        this.whiteState = new State(WHITE_DISK, this.state, this.whiteDisks);
+        this.emptyState = new State(null,this.state, this.emptyCells);
+     }
+ };
+
+ class Player{
+     constructor(color,){
+         this.disks=2;
+         this.isIA=false;
+         this.diskColor=color;
+     }
+
+ };
  /*class to hold DOM information about each cellDOM in the game board */
  class Cell{
      constructor(id){
@@ -55,9 +99,11 @@
  }
  
 
-class GameBoard{
-    constructor(){
-        let gameBoard = document.getElementById("gameBoard");
+class GameController{
+    constructor(parentId){
+        this.whiteDisksPlayer = new Player(WHITE_DISK);
+        this.blackDisksPlayer = new Player(BLACK_DISK);
+        let gameBoard = document.getElementById(parentId);
         this.table = document.createElement("table");
         gameBoard.appendChild(this.table);
         this.nextAvailablePositions = [];
@@ -161,9 +207,6 @@ class GameBoard{
     turnOponentDisks(i,j){
        
         let oponentPositions = this.getNextPositions(i,j);
-        if(oponentPositions.length ==0){
-            alert("empty");
-        }
         let direction;
         let moves;
         let endX,endY,opX,opY,x,y;
@@ -405,16 +448,10 @@ class GameBoard{
     
 };
 
-class GameController{
-    constructor(){
-        this.gameBoard = new GameBoard();
-    }
-       
- 
-};
+
 
 window.onload = function () {
-    let game = new GameController;
+    let game = new GameController();
     
 }
  
