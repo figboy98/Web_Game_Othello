@@ -1,8 +1,8 @@
 body{
-	height: 100%;
-	margin: 0;
-	background: green;
-    font-family: fantasy;
+    height: 100%;
+    margin: 0;
+    background: green;
+    font-family: verdana;
     font-weight: 700;
     color: white;
 }
@@ -36,6 +36,7 @@ header.navbar{
         color: black;
         font-size: 100px;
         font-weight: 700;
+	font-family: fantasy;
         text-transform: uppercase;
     }
     header.navbar nav{
