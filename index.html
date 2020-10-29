@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
     <link rel="stylesheet" href="CSS/versus.css" type="text/css">
-     <link rel="stylesheet" href="CSS/game.css" type="text/css">
+    <link rel="stylesheet" href="CSS/game.css" type="text/css">
+    <link rel="stylesheet" href="CSS/login.css" type="text/css">
 
 
      <title>Othello</title>
@@ -19,10 +20,14 @@
             	<header class="navbar" style="z-index: 1">
                             <img src="img/logo.png" alt="logo" class="logo" width="8%">
                             <div><h1>&nbsp;&nbsp;&nbsp;&nbsp;Othello</h1></div>
+
                             <nav>
-                                <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>  
+                                <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
+                                <a><span onclick="showLogin();"><b>Login</b></span></a>  
                             </nav>
+
                         </header>
+                      </div>
 						</div>
 						</div>
 <!-----------------------Intruçoes----------------------------->
@@ -123,6 +128,66 @@
                           
                         </div>
                     </div>
+            <div id="login-form" class="modal">
+                <span onclick="hideLogin();" 
+                class="close-login" title="Close Form">&times;</span>
+                <!-- Modal Content -->
+                <form class="login-modal-content animate" action="#">
+                    
+
+                    <div class="login-container">
+                        <label for="uname"><b>Utilizador</b></label>
+                        <input type="text" name="uname" required>
+
+                        <label for="psw"><b>Palavra-passe</b></label>
+                        <input type="password" name="psw" required>
+
+                        <button class= "submit" type="submit">Entrar</button>
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember">Lembrar-me
+                        </label>
+                    </div>
+
+                    <div class="login-container" style="background-color: green">
+                        <button type="button" onclick="hideLogin();" class="login-cancelbtn">Cancelar</button>
+                         <span class="psw"><a href="#">
+                          Recuperar a palavra-passe?</a><b> ou <br/></b></span>
+
+                        <span class="psw"> <a href="#" onclick="showRegister();">Criar uma nova conta</a></span>
+                    </div>
+                </form>
+            </div>
+
+        <!--Sing up -->
+
+            <div id="singup-form" class="modal">
+                <span onclick="hideRegister();" 
+                class="close-login" title="Close Form">&times;</span>
+               
+                <form class="login-modal-content animate" action="#">
+                   
+
+                    <div class="login-container">
+                        <label for="uname"><b>Utilizador</b></label>
+                        <input type="text" placeholder="Introduza um nome de Utilizador" name="uname" required>
+                        
+                        <label for="emai"><b>Email</b></label>
+                        <input type="email" placeholder="Introduza uma conta de email" name="emai" required>
+
+                        <label for="psw"><b>Palavra-passe</b></label>
+                        <input type="password" placeholder="Introduza uma palavra-passe" name="psw" required>
+
+                        <button class= "submit" type="submit">Criar nova conta</button>
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember">Lembrar-me
+                        </label>
+                    </div>
+
+                    <div class="login-container" style="background-color: green">
+                        <button type="button" onclick="hideRegister()" class="login-cancelbtn">Cancelar</button>
+                    </div>
+                </form>
+            </div>
                 </div><br>
 
 		<script src="scripts/NavMenus.js"></script>
