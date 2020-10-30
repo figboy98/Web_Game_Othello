@@ -3,11 +3,12 @@
     <head>
     <meta charset="UTF-8">
 
-
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
     <link rel="stylesheet" href="CSS/versus.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
+    <link rel="stylesheet" href="CSS/style.css" type="text/css">
+
 
 
      <title>Othello</title>
@@ -23,7 +24,7 @@
                             <nav>
                                 <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
                                 <a><span onclick="showLogin();"><b>Login</b></span></a> 
-				<a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a> 
+				                <a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a> 
                           
                             </nav>
 
@@ -193,17 +194,15 @@
 
             <div id="ai-game" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
-                <div class="overlay-content">
-                <!--
-                    COMPLETAR!! 
-                -->
-                </div>
-            </div>
-			
-			
-			
-                </div><br>
+                    <div id="gameBoard"> 
 
+                    </div>
+			
+			
+			
+            </div><br>
+                
+        <script src="scripts/gameBoardGenerator.js"></script> 
 		<script src="scripts/NavMenus.js"></script>
 		<script src="scripts/collapsible.js"></script>
 		</body>

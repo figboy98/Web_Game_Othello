@@ -24,10 +24,13 @@
          this.state = document.createElement("div");
          this.cell = document.createElement("div");
          this.disk = document.createElement("div");
-         this.numDisks = document.createTextNode(num);
+         this.numDisks = document.createElement("div");
+         this.numDisks.appendChild(document.createTextNode(num));
          
+         this.state.className="diskState";
          this.cell.className="cell";
          this.disk.className=diskClass;
+         this.numDisks.className="numDiskState";
          
          this.cell.appendChild(this.disk);
 
@@ -37,15 +40,44 @@
          parent.appendChild(this.state);
      }
      updateValue(number){
-         this.numDisks=number;
-         this.temp=document.createTextNode(number);
-         this.state.replaceChild(this.temp, this.state.childNodes[1]);
+        this.numDisks.replaceChild(document.createTextNode(number), this.numDisks.childNodes[0]);
 
      }
  };
 
  class PlayState{
-     constructor(parentId)
+     constructor(parentId){
+        this.parent = document.getElementById(parentId); 
+        this.playState = document.createElement("div");
+        this.playState.className="playState";
+        this.giveUpButton = document.createElement("button");
+        this.giveUpButton.innerHTML = "Desistir";
+        this.play = document.createElement("div");
+        this.playDisk = document.createElement("div");
+        this.play.innerHTML = "Turno de";
+        this.playDisk.className ="black";
+        this.skipButton = document.createElement("button");
+        this.skipButton.innerHTML=("Passar jogada");
+
+        this.playState.appendChild(this.play);
+        this.playState.appendChild(this.playDisk);
+        this.playState.appendChild(this.giveUpButton);
+        this.parent.appendChild(this.playState);
+     }
+
+     changePlayerShift(playerColor){
+         this.temp = document.createElement("div");
+         this.temp.className=playerColor;
+         this.playState.replaceChild(this.temp, this.playState.childNodes[1]);
+     }
+
+     unableToPlayMessage(){
+         this.message = document.createElement("div");
+         this.message.innerHTML = "Sem jogadas possíveis";
+         
+         this.playState.replaceChild(this.message, this.playState.childNodes[0]);
+         this.playState.replaceChild(this.skipButton, this.playState.childNodes[1]);
+     }
  }
 
  class GameState{
@@ -55,7 +87,7 @@
         this.emptyCells=64;
         this.parent = document.getElementById(parentId);
         this.state = document.createElement("div");
-        this.state.className="state";
+        this.state.className="gameState";
         this.parent.appendChild(this.state);
 
         this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
@@ -83,6 +115,7 @@
      constructor(color){
          this.disks=2;
          this.diskColor=color;
+         this.canPlay=true;
      }
      increaseDisks(){
          this.disks+=1;
@@ -128,81 +161,131 @@
      }
  }
  
-
 class GameBoard{
-    constructor(parentId){
-        this.whiteDisksPlayer = new Player(WHITE_DISK);
-        this.blackDisksPlayer = new Player(BLACK_DISK);
-        this.gameState = new GameState(parentId);
-        let gameBoard = document.getElementById(parentId);
+    constructor(parentId, clickFunction){
+        this.parent = document.getElementById(parentId);
+        this.board = document.createElement("div");
+        this.board.className="board";
         this.table = document.createElement("table");
-        gameBoard.appendChild(this.table);
-        this.nextAvailablePositions = [];
+
         this.gameView = new Array(8);
         this.gameData = new Array(8);
         for(var i=0; i<8; i++){
             this.gameData[i] = new Array(8);
             this.gameView[i] = new Array(8);
         }
+        this.buildBoard(clickFunction);
+        this.board.appendChild(this.table);
+        this.parent.appendChild(this.board);
+    }
+        
+        buildBoard() {
+            for(var i=0; i<8; i++){
+                let tr = document.createElement("tr");
+                this.table.appendChild(tr);
+                for(var j=0; j<8;j++){
+                    let id = i.toString() + j.toString();
+                    let cell = new Cell(id);
+                    let cellDOM = cell.getCellDOM();
+                    tr.appendChild(cellDOM);
+                    this.gameData[i][j] = undefined;
+                    this.gameView[i][j] = cell;
+                }            
+            }
+        } 
+
+};
+
+class GameController{
+    constructor(parentId){
+        this.whiteDisksPlayer = new Player(WHITE_DISK);
+        this.blackDisksPlayer = new Player(BLACK_DISK);
+        this.gameState = new GameState(parentId);
+        this.playState = new PlayState(parentId);
+        this.gameBoard = new GameBoard(parentId, this.onClick);
+        
+        this.nextAvailablePositions = [];
+        
         this.currPlayer = this.blackDisksPlayer;
         this.nextPlayer = this.whiteDisksPlayer;
-        this.buildBoard();
-        this.initBoard();
+
+        this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
+        
+        this.addHandlers();
+
+        this.startGame();
     }
 
-    buildBoard() {
-        for(var i=0; i<8; i++){
-            let tr = document.createElement("tr");
-            this.table.appendChild(tr);
-            for(var j=0; j<8;j++){
-                let id = i.toString() + j.toString();
-                let cell = new Cell(id);
-                let cellDOM = cell.getCellDOM();
-                tr.appendChild(cellDOM);
-                cellDOM.addEventListener("click",this.onClick.bind(this,cell));
-                this.gameData[i][j] = undefined;
-                this.gameView[i][j] = cell;
-            }
-        }
-    }
-
-    initBoard(){        
+    
+    startGame(){
         this.addDisk(3,3,this.whiteDisksPlayer);
         this.addDisk(4,4,this.whiteDisksPlayer);
         this.addDisk(3,4,this.blackDisksPlayer);
-        this.addDisk(4,3,this.blackDisksPlayer);
-        this.whiteDisksPlayer.disks=2;
-        this.blackDisksPlayer.disks=2;
-        this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
-
-        this.getNextAvailablePosition(currPlayer);
-        this.displayNextAvailable(); 
+        this.addDisk(4,3,this.blackDisksPlayer); 
         
+        this.getNextAvailablePosition(currPlayer);
+        this.displayNextAvailable();  
+    }
+
+    addHandlers(){
+        this.playState.skipButton.addEventListener("click", this.skipShift.bind(this));
+        
+        for(var i=0; i<8; i++){
+            for(var j=0; j<8; j++){
+                let cell = this.gameBoard.gameView[i][j];
+                let cellDOM = cell.getCellDOM();
+                cellDOM.addEventListener("click",this.onClick.bind(this,cell));
+            }
+        }
 
     }
 
-    displayNextAvailable(){
-        let size = this.nextAvailablePositions.length;
-        if(size==0){
-            alert("empty");
-            return;
+
+    unableToPlay(){
+        this.playState.unableToPlayMessage();
+        this.currPlayer.canPlay=false;
+        if(this.currPlayer.canPlay==false && this.nextPlayer.canPlay==false){
+            this.endGame();
         }
+        
+        
+
+    }
+    endGame(){
+        alert("Acabou o jogo")
+    }
+
+    skipShift(){
+        this.changePlayerTurn();
+        this.getNextAvailablePosition(this.currPlayer);
+        this.displayNextAvailable(); 
+    }
+    displayNextAvailable(){
+        let gameView = this.gameBoard.gameView;
+        let size = this.nextAvailablePositions.length;
+       
+        if(size==0){
+            this.unableToPlay(); 
+            return;
+        } 
+            
         for(var i=0; i<size; i++){
             let k = this.nextAvailablePositions[i].x;
             let j = this.nextAvailablePositions[i].y;
-            let cell = this.gameView[k][j];
+            let cell = gameView[k][j];
             cell.addDisk(AVAILABLE_DISK);
             cell.clickable=true;
         }
     }
     clearAvailablePositions(currX, currY){
-        var size = this.nextAvailablePositions.length;
+        let size = this.nextAvailablePositions.length;
+        let gameView = this.gameBoard.gameView;
         for(var i=0; i<size;i++){
             let x = this.nextAvailablePositions[i].x;
             let y = this.nextAvailablePositions[i].y;
             if(x != currX || y!= currY){
-                this.gameView[x][y].addDisk("NotAvailable");
-                this.gameView[x][y].clickable=false;
+                gameView[x][y].addDisk("NotAvailable");
+                gameView[x][y].clickable=false;
             }
         }
 
@@ -212,8 +295,9 @@ class GameBoard{
     onClick(cellClicked){
         let i = cellClicked.x;
         let j = cellClicked.y;
+        let gameView = this.gameBoard.gameView;
 
-        if(this.gameView[i][j].clickable){
+        if(gameView[i][j].clickable){
             this.turnOponentDisks(i,j);
             this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
             this.changePlayerTurn();
@@ -224,10 +308,10 @@ class GameBoard{
 
     }
     addDisk(i,j,currPlayer){
-
+        let gameData = this.gameBoard.gameData;
         let color = currPlayer.diskColor;
-        let cell = this.gameView[i][j];
-        this.gameData[i][j] = color;
+        let cell = this.gameBoard.gameView[i][j];
+        gameData[i][j] = color;
         cell.addDisk(color);
         this.changeBorders(i,j);
     }
@@ -235,6 +319,8 @@ class GameBoard{
         let temp = this.currPlayer;
         this.currPlayer=this.nextPlayer;
         this.nextPlayer = temp;
+
+        this.playState.changePlayerShift(this.currPlayer.diskColor);
     }
     getNextPositions(i,j){
         let size = this.nextAvailablePositions.length;
@@ -248,6 +334,7 @@ class GameBoard{
     }
     
     turnOponentDisks(i,j){
+        let gameData = this.gameBoard.gameData;
         let color = this.currPlayer.diskColor;
         let oponentPositions = this.getNextPositions(i,j);
         let direction;
@@ -265,11 +352,11 @@ class GameBoard{
             y = Number(j);
 
             while(x!=endX || y!=endY){
-                if(this.gameData[x][y] ==this.nextPlayer.diskColor){
+                if(gameData[x][y] ==this.nextPlayer.diskColor){
                       this.nextPlayer.decreaseDisks();
                   }  
                 
-                if(this.gameData[x][y] !=color){
+                if(gameData[x][y] !=color){
                     this.addDisk(x,y,this.currPlayer);
                     this.currPlayer.increaseDisks();
                 }
@@ -300,6 +387,7 @@ class GameBoard{
     }
 
     getNextAvailablePosition(currPlayer){
+        let gameData = this.gameBoard.gameData;
         let color = currPlayer.diskColor;
         this.nextAvailablePositions = [];
         let oponentColor;
@@ -313,7 +401,7 @@ class GameBoard{
 
         for(var i=TOP; i <= BOTTOM; i++){
             for(var j = LEFT; j<=RIGHT; j++){
-                var currColor = this.gameData[i][j];
+                var currColor = gameData[i][j];
                 if(currColor == oponentColor){
                     let temp = this.lookAround(i,j,oponentColor);
                     positions = positions.concat(temp);
@@ -379,6 +467,7 @@ class GameBoard{
     lookAux(i,j,direction,oponentColor){
         let k=i;
         let l=j;
+        let gameData = this.gameBoard.gameData;
         let moves = this.decideDirection(direction);
         let endX, endY,color,counter=0,nextCords;
         let foundOponent = false,foundCurr=false,invalid=false;
@@ -387,10 +476,14 @@ class GameBoard{
       
         while(true){
             if(!this.isInsideLimits(k,l)){
+                if(k>7 || k <0 || l>7 || l<0){
+                    invalid = false;
+                    break;
+                }
                 invalid=true;
                 break;
             }
-            color = this.gameData[k][l];
+            color = gameData[k][l];
 
             counter++;
             if(color == undefined){
@@ -427,6 +520,7 @@ class GameBoard{
     }
 
     makeNextAvailablePosition(k,l,endX, endY,counter,opI,opJ,direction){
+        let gameData = this.gameBoard.gameData;
         let nextI, nextJ;
         let nextCords;
         let invalid = false;
@@ -448,10 +542,10 @@ class GameBoard{
                 invalid=true;
                 break;
             }
-            else if(this.gameData[nextI][nextJ]== undefined){
+            else if(gameData[nextI][nextJ]== undefined){
                 break;
             }
-            else if(this.gameData[nextI][nextJ] !=undefined){
+            else if(gameData[nextI][nextJ] !=undefined){
                 counter++;
             }
         } 
@@ -491,15 +585,6 @@ class GameBoard{
     
 };
 
-
-class GameController{
-    constructor(parentId){
-        let gameBoard = new GameBoard(parentId);
-        //let gameState = new GameState(parentId);
-    }
-
-
-}
 window.onload = function () {
     let game = new GameController("gameBoard");
     

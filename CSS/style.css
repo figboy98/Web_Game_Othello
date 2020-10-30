@@ -1,0 +1,76 @@
+#gameBoard{
+    flex-direction:row;
+    width: 700px;
+    height: 800px;
+    
+}
+.board{
+    background-color:black;
+    width: 515px;
+    height: 515px;
+    
+}
+.gameState{
+    
+}
+.diskState{
+    
+}
+.numDiskState{
+    font-size: large;
+    padding: 10px;
+    align-self: center;
+}
+.playState{
+    background-color: lightgray;
+    width: 515px;
+    margin-bottom: 5px;
+}
+.cell{
+    width:  60px;
+    height: 60px;
+    background-color: green;
+    margin-right: 5px;
+    margin-top: 5px;;
+    margin-left: 5px;
+    margin-bottom: 5px;
+
+}
+.black{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    background-color: black;
+    margin-left:auto;
+    margin-right: auto;
+
+}    
+.white{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    background-color:white ;
+    margin-left:auto;
+    margin-right: auto;
+
+}
+.available{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    margin-left:auto;
+    margin-right: auto;
+    border:2px solid grey;
+}
+
+.NotAvailable{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    display:block;
+    margin-left:auto;
+    margin-right: auto;
+} 
