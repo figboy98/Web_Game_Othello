@@ -44,25 +44,26 @@
 
      }
  };
+class ShiftState{
+    constructor(parent){
+        this.parent = document.getElementById(parent);
+        this.shift = document.createElement("div");
+        this.shift.innerHTML = "Turno de";
+        this.disk = document.createElement("div");
+        this.disk.className="white";
+        this.appendChild(this.shift);
+        this.appendChild()
 
- class PlayState{
+    }
+
+};
+ class MessageBoard{
      constructor(parentId){
         this.parent = document.getElementById(parentId); 
-        this.playState = document.createElement("div");
-        this.playState.className="playState";
-        this.giveUpButton = document.createElement("button");
-        this.giveUpButton.innerHTML = "Desistir";
-        this.play = document.createElement("div");
-        this.playDisk = document.createElement("div");
-        this.play.innerHTML = "Turno de";
-        this.playDisk.className ="black";
-        this.skipButton = document.createElement("button");
-        this.skipButton.innerHTML=("Passar jogada");
+        this.shiftDiv = document.createElement("div");
+        this.shift = new ShiftState(this.shiftDiv);
 
-        this.playState.appendChild(this.play);
-        this.playState.appendChild(this.playDisk);
-        this.playState.appendChild(this.giveUpButton);
-        this.parent.appendChild(this.playState);
+        
      }
 
      changePlayerShift(playerColor){
