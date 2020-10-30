@@ -1,7 +1,9 @@
 #gameBoard{
     flex-direction:row;
     width: 700px;
-    height: 800px;
+    height: 900px;
+    margin-left:700px;
+    background-color:whitesmoke;
     
 }
 .board{
