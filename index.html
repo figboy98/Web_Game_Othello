@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
     <link rel="stylesheet" href="CSS/versus.css" type="text/css">
-    <link rel="stylesheet" href="CSS/game.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
 
 
@@ -23,13 +22,14 @@
 
                             <nav>
                                 <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
-                                <a><span onclick="showLogin();"><b>Login</b></span></a>  
+                                <a><span onclick="showLogin();"><b>Login</b></span></a> 
+                          
                             </nav>
 
                         </header>
-                      </div>
-						</div>
-						</div>
+                      
+		</div>
+		</div>
 <!-----------------------Intruçoes----------------------------->
  <div id="instruction-page" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('instruction-page')">&times;</a>
@@ -188,6 +188,19 @@
                     </div>
                 </form>
             </div>
+<!-------------Play game----------->
+
+            <div id="ai-game" class="overlay">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
+                <div class="overlay-content">
+                <!--
+                    COMPLETAR!! 
+                -->
+                </div>
+            </div>
+			
+			
+			
                 </div><br>
 
 		<script src="scripts/NavMenus.js"></script>
