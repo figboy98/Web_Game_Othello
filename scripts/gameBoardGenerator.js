@@ -19,7 +19,7 @@
  let DONT_MOVE = "dontMove";
  
 
- class State{
+ class DiskState{
      constructor(diskClass,parent,num){
          this.state = document.createElement("div");
          this.cell = document.createElement("div");
@@ -44,6 +44,10 @@
      }
  };
 
+ class PlayState{
+     constructor(parentId)
+ }
+
  class GameState{
      constructor(parentId){
         this.blackDisks=0;
@@ -54,22 +58,22 @@
         this.state.className="state";
         this.parent.appendChild(this.state);
 
-        this.blackState = new State(BLACK_DISK, this.state,this.blackDisks);
-        this.whiteState = new State(WHITE_DISK, this.state, this.whiteDisks);
-        this.emptyState = new State(null,this.state, this.emptyCells);
+        this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
+        this.whiteState = new DiskState(WHITE_DISK, this.state, this.whiteDisks);
+        this.emptyState = new DiskState(null,this.state, this.emptyCells);
      }
 
 
-     updateGameState(color){
-        if(color ==WHITE_DISK){
-            this.whiteDisks+=1;
-            this.whiteState.updateValue(this.whiteDisks);
-        }
-        else if(color ==BLACK_DISK){
-            this.blackDisks+=1;
-            this.blackState.updateValue(this.blackDisks);
-        }
-        this.emptyCells-=1;
+     updateDiskState(valueWhite, valueBlack){
+            
+        this.whiteDisks = valueWhite;
+
+        this.blackDisks=valueBlack;
+        
+        this.emptyCells= 64 - (this.blackDisks+this.whiteDisks);
+        
+        this.blackState.updateValue(this.blackDisks);
+        this.whiteState.updateValue(this.whiteDisks);
         this.emptyState.updateValue(this.emptyCells);
     }
 
@@ -77,12 +81,14 @@
 
  class Player{
      constructor(color){
-         this.disks=0;
-         this.isIA=false;
+         this.disks=2;
          this.diskColor=color;
      }
      increaseDisks(){
          this.disks+=1;
+     }
+     decreaseDisks(){
+         this.disks-=1;
      }
 
  };
@@ -165,7 +171,9 @@ class GameBoard{
         this.addDisk(4,4,this.whiteDisksPlayer);
         this.addDisk(3,4,this.blackDisksPlayer);
         this.addDisk(4,3,this.blackDisksPlayer);
-
+        this.whiteDisksPlayer.disks=2;
+        this.blackDisksPlayer.disks=2;
+        this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
 
         this.getNextAvailablePosition(currPlayer);
         this.displayNextAvailable(); 
@@ -207,12 +215,21 @@ class GameBoard{
 
         if(this.gameView[i][j].clickable){
             this.turnOponentDisks(i,j);
+            this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
             this.changePlayerTurn();
             this.clearAvailablePositions(i,j);
             this.getNextAvailablePosition(this.currPlayer);
             this.displayNextAvailable();
         }
 
+    }
+    addDisk(i,j,currPlayer){
+
+        let color = currPlayer.diskColor;
+        let cell = this.gameView[i][j];
+        this.gameData[i][j] = color;
+        cell.addDisk(color);
+        this.changeBorders(i,j);
     }
     changePlayerTurn(){
         let temp = this.currPlayer;
@@ -231,7 +248,7 @@ class GameBoard{
     }
     
     turnOponentDisks(i,j){
-       
+        let color = this.currPlayer.diskColor;
         let oponentPositions = this.getNextPositions(i,j);
         let direction;
         let moves;
@@ -248,8 +265,14 @@ class GameBoard{
             y = Number(j);
 
             while(x!=endX || y!=endY){
-                this.addDisk(x,y,this.currPlayer);
+                if(this.gameData[x][y] ==this.nextPlayer.diskColor){
+                      this.nextPlayer.decreaseDisks();
+                  }  
                 
+                if(this.gameData[x][y] !=color){
+                    this.addDisk(x,y,this.currPlayer);
+                    this.currPlayer.increaseDisks();
+                }
                 if(opX != DONT_MOVE){
                     x+=opX;
                 }
@@ -260,22 +283,7 @@ class GameBoard{
         }
     }
 
-    addDisk(i,j,currPlayer){
-
-        let color = currPlayer.diskColor;
-        let cell = this.gameView[i][j];
-        if(this.gameData[i][j] !=color){
-            this.gameData[i][j] = color;
-            cell.addDisk(color);
-            currPlayer.increaseDisks();
-            this.gameState.updateGameState(color);
-
-
-
-        }
-
-        this.changeBorders(i,j);
-    }
+   
     changeBorders(i,j){
         if(i >=BOTTOM && i < 7){
             BOTTOM +=1;
