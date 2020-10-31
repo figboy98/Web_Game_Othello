@@ -27,8 +27,8 @@
        this.state.className="gameState";
        this.parent.appendChild(this.state);
 
-       this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
-       this.whiteState = new DiskState(WHITE_DISK, this.state, this.whiteDisks);
+       this.blackState = new DiskState(WHITE_DISK, this.state,this.blackDisks);
+       this.whiteState = new DiskState(BLACK_DISK, this.state, this.whiteDisks);
        this.emptyState = new DiskState(null,this.state, this.emptyCells);
     }
 
@@ -74,19 +74,29 @@
      }
  };
 
- /*class MessageBoard{
-    constructor(parentId){
+ class MessageBoard{
+    constructor(parentId, startPlayer){
        this.parent = document.getElementById(parentId); 
-       this.placeHolder = document.createElement("div");
-       this.placeHolder.className="messageBoard";
-       this.parent.appendChild(this.placeHolder);
+       this.playing = document.createElement("div");
+       this.playing.className = "messageBoard";
+       this.text = document.createElement("div");
+       this.text.appendChild(document.createTextNode("Turno de"));
+       this.disk = document.createElement("div");
+       this.disk.className = "diskMessage";
+       this.currDisk = document.createElement("div");
+       this.currDisk.className = startPlayer;
+       this.disk.appendChild(this.currDisk);
+       
+       this.playing.appendChild(this.text);
+       this.playing.appendChild(this.disk);
+       this.parent.appendChild(this.playing);
        this.skipButton = document.createElement("button");
        this.skipButton.innerHTML="Passar jogada";
 
-       this.turn = new TurnState(this.parent);
-
-
-
+       this.giveUp = document.createElement("button");
+       this.giveUp.innerHTML ="Desistir";
+       this.giveUp.id="giveUpButton";
+       this.playing.append(this.giveUp); 
 
        
     }
@@ -94,29 +104,39 @@
     changePlayerTurn(playerColor){
         this.temp = document.createElement("div");
         this.temp.className=playerColor;
-        this.placeHolder.replaceChild(this.temp, this.playState.childNodes[1]);
+        this.disk.replaceChild(this.temp, this.disk.childNodes[0]);
     }
 
     unableToPlayMessage(){
         this.message = document.createElement("div");
         this.message.innerHTML = "Sem jogadas possíveis";
         
-        this.playState.replaceChild(this.message, this.playState.childNodes[0]);
-        this.playState.replaceChild(this.skipButton, this.playState.childNodes[1]);
+        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
+        this.playing.replaceChild(this.skipButton, this.playing.childNodes[1]);
+    }
+    displayVictoryOrDefeat(victory){
+
+        this.message = document.createElement("div");
+        if(victory){
+            this.message.innerHTML = "Parabéns! Ganhaste o jogo";
+        }
+        else{
+            this.message.innerHTML = "Perdeste o jogo";
+        }
+        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
+        this.playing.removeChild(this.playing.childNodes[1]);
+    }
+
+    giveUpMessage(){
+        this.message = document.createElement("div");
+        this.message.innerHTML = "Perdeste por desistência";
+        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
+        this.playing.removeChild(this.playing.childNodes[1]);
+
     }
 };
 
-class TurnState{
-    constructor(parent){
-        this.turn = document.createElement("div");
-        this.turn.className="turnState"
-        this.turn.innerHTML = "Turno de";
-        this.disk = document.createElement("div");
-        this.turn.appendChild(this.disk);
-        this.disk.className="white";
-        parent.appendChild(this.turn);
-    }
-}; */
+
  
 
  class Player{
@@ -208,14 +228,18 @@ class GameController{
     constructor(parentId){
         this.whiteDisksPlayer = new Player(WHITE_DISK);
         this.blackDisksPlayer = new Player(BLACK_DISK);
+        
+        this.currPlayer = this.blackDisksPlayer;
+        this.nextPlayer = this.whiteDisksPlayer;
+        
         this.gameState = new GameState(parentId);
-       // this.playState = new PlayState(parentId);
+        this.playState = new MessageBoard(parentId, this.currPlayer.diskColor );
+       
         this.gameBoard = new GameBoard(parentId, this.onClick);
         
         this.nextAvailablePositions = [];
         
-        this.currPlayer = this.blackDisksPlayer;
-        this.nextPlayer = this.whiteDisksPlayer;
+
 
         this.computerPlayer= this.whiteDisksPlayer.diskColor;
 
@@ -243,10 +267,14 @@ class GameController{
 
     computerPlay(){
         let size = this.nextAvailablePositions.length;
-        let rand = this.randomIntFromInterval(0, size);
+        let rand = this.randomIntFromInterval(0, size-1);
 
         let cell = this.nextAvailablePositions[rand];
-        this.onClick(cell);
+        if(size==0){
+            this.unableToPlay();
+            return;
+        }
+        setTimeout(() => {  this.onClick(cell); }, 500);
     }
 
     randomIntFromInterval(min, max) {
@@ -254,7 +282,10 @@ class GameController{
       }
 
     addHandlers(){
-      //  this.playState.skipButton.addEventListener("click", this.skipShift.bind(this));
+        this.playState.skipButton.addEventListener("click", this.skipTurn.bind(this));
+        
+        this.playState.giveUp.addEventListener("click", this.giveUp.bind(this));
+
         
         for(var i=0; i<8; i++){
             for(var j=0; j<8; j++){
@@ -268,19 +299,49 @@ class GameController{
 
 
     unableToPlay(){
-        alert("Sem jogadas possíveis");
-        //this.playState.unableToPlayMessage();
-        this.skipTurn();
-        this.currPlayer.canPlay=false;
+        
+        this.playState.unableToPlayMessage();
+        if(this.currPlayer== this.computerPlayer){
+
+            this.skipTurn();
+        }
+        
+            this.currPlayer.canPlay=false;
+        
         if(this.currPlayer.canPlay==false && this.nextPlayer.canPlay==false){
-            this.endGame();
+            this.endGame(false);
         }
         
         
 
     }
-    endGame(){
-        alert("Acabou o jogo")
+    giveUp(){
+        this.endGame(true);
+    }
+    endGame(giveUp){
+        let player1, player2;
+        let victory=false;
+        if(this.computerPlayer.diskColor == WHITE_DISK){
+            player1 = this.whiteDisksPlayer;
+            player2 = this.blackDisksPlayer;
+        }
+        else{
+            player1 = this.blackDisksPlayer
+            player2 = this.whiteDisksPlayer;
+        }
+        if(player1.disks > player2.disks){
+            victory=false;
+        }
+        else{
+            victory = true;
+        }
+        if(giveUp){
+            this.playState.giveUpMessage();
+        }
+        else{
+            this.playState.displayVictoryOrDefeat(victory);
+        }
+        this.gameBoard.board.style.setProperty("opacity", 0.2);
     }
 
     skipTurn(){
@@ -295,6 +356,9 @@ class GameController{
         if(size==0){
             this.unableToPlay(); 
             return;
+        }
+        else{
+            this.currPlayer.canPlay=true;
         } 
             
         for(var i=0; i<size; i++){
@@ -346,6 +410,7 @@ class GameController{
         let cell = this.gameBoard.gameView[i][j];
         gameData[i][j] = color;
         cell.addDisk(color);
+        cell.clickable=false;
         this.changeBorders(i,j);
     }
     changePlayerTurn(){
@@ -353,7 +418,7 @@ class GameController{
         this.currPlayer=this.nextPlayer;
         this.nextPlayer = temp;
 
-        //this.playState.changePlayerShift(this.currPlayer.diskColor);
+        this.playState.changePlayerTurn(this.currPlayer.diskColor);
     }
     getNextPositions(i,j){
         let size = this.nextAvailablePositions.length;
