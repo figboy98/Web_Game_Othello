@@ -1,6 +1,6 @@
 #gameBoard{
-    padding-top: 40px;
-    margin: auto;
+    margin:auto; 
+    margin-top: -200px;
     flex-direction:row;
     width: 700px;
     height: 800px;
@@ -13,12 +13,12 @@
     
 }
 .gameState{
-    float: right;
-    display: flex;
-    flex-wrap: nowrap;
-    width: 120px;
-    height: 230px;
-    display: inline;
+    position: relative;
+    left: 550px;
+    top: 500px;
+    display: flexbox;
+    width: 200px;
+    height: 330px;
 
     
 }
@@ -27,7 +27,7 @@
     
 }
 .numDiskState{
-    font-size: large;
+    font-size: 50px;
     padding: 10px;
     align-self: center;
     color: black;
@@ -75,6 +75,11 @@
     margin-top: 5px;;
     margin-left: 5px;
     margin-bottom: 5px;
+}
+.state{
+    padding: 5px;
+    width: 100px;
+    height: 100px;
 }
 .black{
     width: 90%;

@@ -27,8 +27,8 @@
        this.state.className="gameState";
        this.parent.appendChild(this.state);
 
-       this.blackState = new DiskState(WHITE_DISK, this.state,this.blackDisks);
-       this.whiteState = new DiskState(BLACK_DISK, this.state, this.whiteDisks);
+       this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
+       this.whiteState = new DiskState(WHITE_DISK, this.state, this.whiteDisks);
        this.emptyState = new DiskState(null,this.state, this.emptyCells);
     }
 
@@ -57,7 +57,7 @@
          this.numDisks.appendChild(document.createTextNode(num));
          
          this.state.className="diskState";
-         this.cell.className="cell";
+         this.cell.className="cell state";
          this.disk.className=diskClass;
          this.numDisks.className="numDiskState";
          
@@ -129,7 +129,6 @@
         }
         this.playing.replaceChild(this.message, this.playing.childNodes[0]);
         this.playing.removeChild(this.playing.childNodes[1]);
-        this.playing.removeChild(this.playing.childNodes[this.giveUp]);
     }
 
     giveUpMessage(){
@@ -306,12 +305,12 @@ class GameController{
 
     unableToPlay(){
         
-        this.playState.unableToPlayMessage();
+        if(this.currPlayer.canPlay=true || this.nextPlayer.canPlay == true)
+            this.playState.unableToPlayMessage();
         if(this.currPlayer== this.computerPlayer){
 
             this.skipTurn();
         }
-        
             this.currPlayer.canPlay=false;
         
         if(this.currPlayer.canPlay==false && this.nextPlayer.canPlay==false){
@@ -325,17 +324,17 @@ class GameController{
         this.endGame(true);
     }
     endGame(giveUp){
-        let player1, player2;
+        let pc, player;
         let victory=false;
-        if(this.computerPlayer.diskColor == WHITE_DISK){
-            player1 = this.whiteDisksPlayer;
-            player2 = this.blackDisksPlayer;
+        if(this.computerPlayer == WHITE_DISK){
+            pc = this.whiteDisksPlayer;
+            player = this.blackDisksPlayer;
         }
         else{
-            player1 = this.blackDisksPlayer
-            player2 = this.whiteDisksPlayer;
+            pc = this.blackDisksPlayer
+            player = this.whiteDisksPlayer;
         }
-        if(player1.disks > player2.disks){
+        if(pc.disks > player.disks){
             victory=false;
         }
         else{
@@ -343,11 +342,15 @@ class GameController{
         }
         if(giveUp){
             this.playState.giveUpMessage();
+            victory = false;
         }
         else{
             this.playState.displayVictoryOrDefeat(victory);
         }
+
         this.gameBoard.board.style.setProperty("opacity", 0.2);
+
+        this.updateClassifications(victory);
     }
 
     skipTurn(){
@@ -685,6 +688,24 @@ class GameController{
         }
         return positions;
         
+    }
+
+    updateClassifications(victory){
+        this.victorys = document.getElementById("victorys");
+        this.victoryNum = document.getElementById("victorys").textContent;
+        this.defeats = document.getElementById("defeats");
+        this.defeatsNum = document.getElementById("defeats").textContent;
+
+        if(victory){
+            this.num = Number(this.victoryNum +1 );
+            this.victorys.innerHTML=this.num;
+        }
+        else{
+            this.num = Number(this.defeatsNum +1);
+            this.defeats.innerHTML= this.num;
+        }
+
+
     }
     
 };
