@@ -192,16 +192,33 @@
             </div>
 </div>
 </div>
-
-
-            <!-------------Play game----------->
-
-    <div id="ai-game" class="overlay">
+   <!-------------Play game----------->
+           <div id="ai-game" class="overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
-            <div id="gameBoard"> 
-
-            </div>
+         <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Jogador vs Jogador</b></h1></button>
+                        <div class="ov-content-collapsible">   
+                        </div>
+                    </div>
+                </div><br>
+                 <div class="overlay-content">
+                    <div>
+                        <button type="button" class="ov-collapsible"><h1><b>Jogador vs Computador</b></h1></button>
+                        <div class="ov-content-collapsible">
+                            <p>
+                             <div id="gameBoard"> 
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div><br>            
     </div>
+	    
+      <!-------------Classificaçoes----------->
+      <div id="classi" class= "overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('classi')">&times;</a>
+</div>
                 
         <script src="scripts/gameBoardGenerator.js"></script> 
 		<script src="scripts/NavMenus.js"></script>
