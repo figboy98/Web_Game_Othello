@@ -33,16 +33,34 @@
     color: black;
 }
 .messageBoard{
-    background-color: lightgray;
+    background-color: green;
     display:flex;
     flex-direction: row;
     width: 515px;
-    height: 70px;
+    height: 100px;
     margin-bottom: 5px;
 }
-.diskMessage{
-    width: 60px;
-    height: 60px;
+#diskMessage{
+    margin: auto;
+    margin-left: 10px;
+    width: 70px;
+    height: 70px;
+}
+#skipButton{
+    width: 100px;
+    margin:auto;
+    margin-right: 5px;
+    background-color: grey;
+    color: black;
+    font-size: x-large;
+    border-radius: 25%;
+}
+.messageText{
+    margin:auto;
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 40px;
+    color: black;
 }
 .turnState{
     position: relative;
@@ -95,9 +113,21 @@
     margin-left:auto;
     margin-right: auto;
 } 
+#shiftText{
+    margin:auto;
+    margin-right: 10px;
+    display: flex;
+    margin-left: 10px;
+    font-size: 70px;
+    color: black;
+    
+
+}
 #giveUpButton{
+    width: 100px;
+    margin-left: auto;
     background-color: red;
     color: white;
-    position: relative;
-    float: right;
+    font-size: x-large;
+    border-radius: 25%;
 }

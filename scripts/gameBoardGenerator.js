@@ -81,8 +81,9 @@
        this.playing.className = "messageBoard";
        this.text = document.createElement("div");
        this.text.appendChild(document.createTextNode("Turno de"));
+       this.text.id="shiftText";
        this.disk = document.createElement("div");
-       this.disk.className = "diskMessage";
+       this.disk.id = "diskMessage";
        this.currDisk = document.createElement("div");
        this.currDisk.className = startPlayer;
        this.disk.appendChild(this.currDisk);
@@ -91,6 +92,7 @@
        this.playing.appendChild(this.disk);
        this.parent.appendChild(this.playing);
        this.skipButton = document.createElement("button");
+       this.skipButton.id ="skipButton";
        this.skipButton.innerHTML="Passar jogada";
 
        this.giveUp = document.createElement("button");
@@ -110,6 +112,7 @@
     unableToPlayMessage(){
         this.message = document.createElement("div");
         this.message.innerHTML = "Sem jogadas possíveis";
+        this.message.className="messageText";
         
         this.playing.replaceChild(this.message, this.playing.childNodes[0]);
         this.playing.replaceChild(this.skipButton, this.playing.childNodes[1]);
@@ -117,6 +120,7 @@
     displayVictoryOrDefeat(victory){
 
         this.message = document.createElement("div");
+        this.message.className="messageText";
         if(victory){
             this.message.innerHTML = "Parabéns! Ganhaste o jogo";
         }
@@ -125,10 +129,12 @@
         }
         this.playing.replaceChild(this.message, this.playing.childNodes[0]);
         this.playing.removeChild(this.playing.childNodes[1]);
+        this.playing.removeChild(this.playing.childNodes[this.giveUp]);
     }
 
     giveUpMessage(){
         this.message = document.createElement("div");
+        this.message.className="messageText";
         this.message.innerHTML = "Perdeste por desistência";
         this.playing.replaceChild(this.message, this.playing.childNodes[0]);
         this.playing.removeChild(this.playing.childNodes[1]);
