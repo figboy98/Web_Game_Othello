@@ -25,10 +25,15 @@
     padding: 10px;
     align-self: center;
 }
-.playState{
+.messageBoard{
     background-color: lightgray;
     width: 515px;
     margin-bottom: 5px;
+}
+.turnState{
+    position: relative;
+    left: 5px;
+    bottom: 5px;
 }
 .cell{
     width:  60px;

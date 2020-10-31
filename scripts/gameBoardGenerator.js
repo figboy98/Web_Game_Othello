@@ -3,8 +3,6 @@
  let BOTTOM = 5;
  let RIGHT = 5;
  let TOP = 2; 
- let nextPlayer = "white";
- let currPlayer = "black";
  let BLACK_DISK = "black";
  let WHITE_DISK = "white";
  let AVAILABLE_DISK = "available"
@@ -18,6 +16,37 @@
  let DOWN_RIGHT_DIAGONAL = "drd";
  let DONT_MOVE = "dontMove";
  
+
+ class GameState{
+    constructor(parentId){
+       this.blackDisks=0;
+       this.whiteDisks=0;
+       this.emptyCells=64;
+       this.parent = document.getElementById(parentId);
+       this.state = document.createElement("div");
+       this.state.className="gameState";
+       this.parent.appendChild(this.state);
+
+       this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
+       this.whiteState = new DiskState(WHITE_DISK, this.state, this.whiteDisks);
+       this.emptyState = new DiskState(null,this.state, this.emptyCells);
+    }
+
+
+    updateDiskState(valueWhite, valueBlack){
+           
+       this.whiteDisks = valueWhite;
+
+       this.blackDisks=valueBlack;
+       
+       this.emptyCells= 64 - (this.blackDisks+this.whiteDisks);
+       
+       this.blackState.updateValue(this.blackDisks);
+       this.whiteState.updateValue(this.whiteDisks);
+       this.emptyState.updateValue(this.emptyCells);
+   }
+
+};
 
  class DiskState{
      constructor(diskClass,parent,num){
@@ -44,73 +73,51 @@
 
      }
  };
-class ShiftState{
-    constructor(parent){
-        this.parent = document.getElementById(parent);
-        this.shift = document.createElement("div");
-        this.shift.innerHTML = "Turno de";
-        this.disk = document.createElement("div");
-        this.disk.className="white";
-        this.appendChild(this.shift);
-        this.appendChild()
 
+ /*class MessageBoard{
+    constructor(parentId){
+       this.parent = document.getElementById(parentId); 
+       this.placeHolder = document.createElement("div");
+       this.placeHolder.className="messageBoard";
+       this.parent.appendChild(this.placeHolder);
+       this.skipButton = document.createElement("button");
+       this.skipButton.innerHTML="Passar jogada";
+
+       this.turn = new TurnState(this.parent);
+
+
+
+
+       
     }
 
+    changePlayerTurn(playerColor){
+        this.temp = document.createElement("div");
+        this.temp.className=playerColor;
+        this.placeHolder.replaceChild(this.temp, this.playState.childNodes[1]);
+    }
+
+    unableToPlayMessage(){
+        this.message = document.createElement("div");
+        this.message.innerHTML = "Sem jogadas possíveis";
+        
+        this.playState.replaceChild(this.message, this.playState.childNodes[0]);
+        this.playState.replaceChild(this.skipButton, this.playState.childNodes[1]);
+    }
 };
- class MessageBoard{
-     constructor(parentId){
-        this.parent = document.getElementById(parentId); 
-        this.shiftDiv = document.createElement("div");
-        this.shift = new ShiftState(this.shiftDiv);
 
-        
-     }
-
-     changePlayerShift(playerColor){
-         this.temp = document.createElement("div");
-         this.temp.className=playerColor;
-         this.playState.replaceChild(this.temp, this.playState.childNodes[1]);
-     }
-
-     unableToPlayMessage(){
-         this.message = document.createElement("div");
-         this.message.innerHTML = "Sem jogadas possíveis";
-         
-         this.playState.replaceChild(this.message, this.playState.childNodes[0]);
-         this.playState.replaceChild(this.skipButton, this.playState.childNodes[1]);
-     }
- }
-
- class GameState{
-     constructor(parentId){
-        this.blackDisks=0;
-        this.whiteDisks=0;
-        this.emptyCells=64;
-        this.parent = document.getElementById(parentId);
-        this.state = document.createElement("div");
-        this.state.className="gameState";
-        this.parent.appendChild(this.state);
-
-        this.blackState = new DiskState(BLACK_DISK, this.state,this.blackDisks);
-        this.whiteState = new DiskState(WHITE_DISK, this.state, this.whiteDisks);
-        this.emptyState = new DiskState(null,this.state, this.emptyCells);
-     }
-
-
-     updateDiskState(valueWhite, valueBlack){
-            
-        this.whiteDisks = valueWhite;
-
-        this.blackDisks=valueBlack;
-        
-        this.emptyCells= 64 - (this.blackDisks+this.whiteDisks);
-        
-        this.blackState.updateValue(this.blackDisks);
-        this.whiteState.updateValue(this.whiteDisks);
-        this.emptyState.updateValue(this.emptyCells);
+class TurnState{
+    constructor(parent){
+        this.turn = document.createElement("div");
+        this.turn.className="turnState"
+        this.turn.innerHTML = "Turno de";
+        this.disk = document.createElement("div");
+        this.turn.appendChild(this.disk);
+        this.disk.className="white";
+        parent.appendChild(this.turn);
     }
-
- };
+}; */
+ 
 
  class Player{
      constructor(color){
@@ -202,13 +209,15 @@ class GameController{
         this.whiteDisksPlayer = new Player(WHITE_DISK);
         this.blackDisksPlayer = new Player(BLACK_DISK);
         this.gameState = new GameState(parentId);
-        this.playState = new PlayState(parentId);
+       // this.playState = new PlayState(parentId);
         this.gameBoard = new GameBoard(parentId, this.onClick);
         
         this.nextAvailablePositions = [];
         
         this.currPlayer = this.blackDisksPlayer;
         this.nextPlayer = this.whiteDisksPlayer;
+
+        this.computerPlayer= this.whiteDisksPlayer.diskColor;
 
         this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
         
@@ -224,12 +233,28 @@ class GameController{
         this.addDisk(3,4,this.blackDisksPlayer);
         this.addDisk(4,3,this.blackDisksPlayer); 
         
-        this.getNextAvailablePosition(currPlayer);
+        this.getNextAvailablePosition(this.currPlayer);
         this.displayNextAvailable();  
+        if(this.currPlayer == this.computerPlayer){
+            let cell = this.computerPlay();
+            this.onClick(cell);
+        }
     }
 
+    computerPlay(){
+        let size = this.nextAvailablePositions.length;
+        let rand = this.randomIntFromInterval(0, size);
+
+        let cell = this.nextAvailablePositions[rand];
+        this.onClick(cell);
+    }
+
+    randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
     addHandlers(){
-        this.playState.skipButton.addEventListener("click", this.skipShift.bind(this));
+      //  this.playState.skipButton.addEventListener("click", this.skipShift.bind(this));
         
         for(var i=0; i<8; i++){
             for(var j=0; j<8; j++){
@@ -243,7 +268,9 @@ class GameController{
 
 
     unableToPlay(){
-        this.playState.unableToPlayMessage();
+        alert("Sem jogadas possíveis");
+        //this.playState.unableToPlayMessage();
+        this.skipTurn();
         this.currPlayer.canPlay=false;
         if(this.currPlayer.canPlay==false && this.nextPlayer.canPlay==false){
             this.endGame();
@@ -256,7 +283,7 @@ class GameController{
         alert("Acabou o jogo")
     }
 
-    skipShift(){
+    skipTurn(){
         this.changePlayerTurn();
         this.getNextAvailablePosition(this.currPlayer);
         this.displayNextAvailable(); 
@@ -299,12 +326,17 @@ class GameController{
         let gameView = this.gameBoard.gameView;
 
         if(gameView[i][j].clickable){
+            
             this.turnOponentDisks(i,j);
             this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
             this.changePlayerTurn();
             this.clearAvailablePositions(i,j);
             this.getNextAvailablePosition(this.currPlayer);
             this.displayNextAvailable();
+            
+            if(this.currPlayer.diskColor == this.computerPlayer){
+                this.computerPlay();
+            }
         }
 
     }
@@ -321,7 +353,7 @@ class GameController{
         this.currPlayer=this.nextPlayer;
         this.nextPlayer = temp;
 
-        this.playState.changePlayerShift(this.currPlayer.diskColor);
+        //this.playState.changePlayerShift(this.currPlayer.diskColor);
     }
     getNextPositions(i,j){
         let size = this.nextAvailablePositions.length;
