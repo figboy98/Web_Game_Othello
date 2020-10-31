@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="CSS/versus.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
     <link rel="stylesheet" href="CSS/gameBoard.css" type="text/css">
+    <link rel="stylesheet" href="CSS/classification.css" type="text/css">
+
 
 
 
@@ -25,6 +27,7 @@
                                 <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
                                 <a><span onclick="showLogin();"><b>Login</b></span></a> 
                                 <a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a>
+                                <a><span onclick="openMenu('classi');"><b>Classificações</b></span></a>
                           
                             </nav>
 
@@ -194,12 +197,11 @@
 </div>
    <!-------------Play game----------->
            <div id="ai-game" class="overlay">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
-         <div class="overlay-content">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
+                <div class="overlay-content">
                     <div>
                         <button type="button" class="ov-collapsible"><h1><b>Jogador vs Jogador</b></h1></button>
-                        <div class="ov-content-collapsible">   
-                        </div>
+                        <div class="ov-content-collapsible">  </div>
                     </div>
                 </div><br>
                  <div class="overlay-content">
@@ -213,16 +215,26 @@
                         </div>
                     </div>
                 </div><br>            
-    </div>
-<<<<<<< HEAD
+            </div>
 	    
       <!-------------Classificaçoes----------->
       <div id="classi" class= "overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('classi')">&times;</a>
-</div>
-=======
-
->>>>>>> editing css
+            <table id="classifications">
+                <tr>
+                    <th> Jogador</th>
+                    <th> Vitórias</th>
+                    <th> Derrotas</th>
+                </tr>
+                <tr>
+                    <td id="playerName"> jogador </td>
+                    <td id="victorys"> 0</td>
+                    <td id="defeats"> 0</td>
+                </tr>
+            </table>        
+            
+       
+    </div>
                 
         <script src="scripts/gameBoardGenerator.js"></script> 
 		<script src="scripts/NavMenus.js"></script>

@@ -270,6 +270,7 @@ class GameController{
         }
     }
 
+
     computerPlay(){
         let size = this.nextAvailablePositions.length;
         let rand = this.randomIntFromInterval(0, size-1);
@@ -351,6 +352,8 @@ class GameController{
         this.gameBoard.board.style.setProperty("opacity", 0.2);
 
         this.updateClassifications(victory);
+        exit();
+
     }
 
     skipTurn(){
@@ -711,7 +714,9 @@ class GameController{
 };
 
 window.onload = function () {
-    let game = new GameController("gameBoard");
+    
+        new GameController("gameBoard");
+     
     
 }
  
