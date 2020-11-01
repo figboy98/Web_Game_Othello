@@ -136,3 +136,16 @@
     font-size: x-large;
     border-radius: 25%;
 }
+
+#restartButton{
+    display: none;
+    position: relative;
+    top: -400px;
+    left:150px;
+    border-radius: 30%;
+    margin:auto;    
+    width: 200px;
+    height: 200px;
+    font-size: 30px;
+    text-align: center;
+}

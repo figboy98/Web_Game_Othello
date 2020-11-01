@@ -2,20 +2,24 @@
 <html lang="pt">
     <head>
     <meta charset="UTF-8">
-
+<!-----------------CSS files------------------------------>
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
     <link rel="stylesheet" href="CSS/versus.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
     <link rel="stylesheet" href="CSS/gameBoard.css" type="text/css">
     <link rel="stylesheet" href="CSS/classification.css" type="text/css">
+    <link rel="stylesheet" href="CSS/configurations.css" type="text/css">
 
-
-
+     <!---------------Scripts files-------------->
+     <script src="scripts/gameBoardGenerator.js"></script> 
+     <script src="scripts/NavMenus.js"></script>
+     <script src="scripts/collapsible.js"></script>
 
      <title>Othello</title>
     </head>
     <body>
+       
 
     	<div class="page-container">
             <div class="content-wrap">
@@ -28,6 +32,8 @@
                                 <a><span onclick="showLogin();"><b>Login</b></span></a> 
                                 <a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a>
                                 <a><span onclick="openMenu('classi');"><b>Classificações</b></span></a>
+                                <a><span onclick="openMenu('configurations');"><b>Configurações</b></span></a>
+
                           
                             </nav>
 
@@ -195,26 +201,25 @@
             </div>
 </div>
 </div>
-   <!-------------Play game----------->
-           <div id="ai-game" class="overlay">
+  
+        <!-------------Play game----------->
+            <div id="ai-game" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
-                <div class="overlay-content">
+                <div id="gameBoard">  </div>
+                
+                <!--<div class="overlay-content">
                     <div>
                         <button type="button" class="ov-collapsible"><h1><b>Jogador vs Jogador</b></h1></button>
                         <div class="ov-content-collapsible">  </div>
                     </div>
                 </div><br>
-                 <div class="overlay-content">
+                
+                <div class="overlay-content">
                     <div>
                         <button type="button" class="ov-collapsible"><h1><b>Jogador vs Computador</b></h1></button>
                         <div class="ov-content-collapsible">
-                            <p>
-                             <div id="gameBoard"> 
-                            </p>
-                            
                         </div>
-                    </div>
-                </div><br>            
+                </div><br>    -->        
             </div>
 	    
       <!-------------Classificaçoes----------->
@@ -232,13 +237,33 @@
                     <td id="defeats"> 0</td>
                 </tr>
             </table>        
-            
-       
+    </div>
+
+
+    <!----------------Configurações---------------->
+    <div id="configurations" class= "overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('configurations')">&times;</a>
+        <div id="configs">
+
+            <div class="options" id="gameType">
+                <span> Tipo de jogo: </span>
+                <span id="chooseVsComputer" class="configText"> Contra o computador </span>
+                <span id= "chooseVsPlayer" class="configText"> Contra outro jogador </span>
+            </div>
+            <div class="options" id="colorDisk" > 
+                <span>Cor do disco: </span>
+                <span id="chooseWhiteDisk" class="configText"> Branco </span>
+                <span id="chooseBlackDisk" class ="configText"> Preto </span>
+            </div>
+    
+            <div class="options" d="gameDifficulty">
+                <span> Nivel de dificuldade: </span>
+                <span id="chooseEasy" class="configText"> Fácil</span>
+                <span id="chooseMedium"class="configText"> Médio</span>
+                <span id= "chooseHard" class="configText"> Difícil</span>
+            </div>
     </div>
                 
-        <script src="scripts/gameBoardGenerator.js"></script> 
-		<script src="scripts/NavMenus.js"></script>
-		<script src="scripts/collapsible.js"></script>
-		</body>
+    </body>
 </html>
 

@@ -1,4 +1,6 @@
-
+ 
+ let game;
+ let configs;
  let LEFT = 2;
  let BOTTOM = 5;
  let RIGHT = 5;
@@ -15,7 +17,83 @@
  let UPPER_RIGHT_DIAGONAL = "urd";
  let DOWN_RIGHT_DIAGONAL = "drd";
  let DONT_MOVE = "dontMove";
- 
+ class Configs{
+     constructor(){
+         this.computerPlayer = "white";
+         this.playerVsComputer = true;
+         this.playerVsPlayer = false;
+         this.difficulty=1;
+         this.defaultConfigs();
+         this.addConfigHandlers();
+     }
+
+     defaultConfigs(){
+       this.activeConfig("chooseBlackDisk");
+       this.activeConfig("chooseVsComputer");
+       this.activeConfig("chooseEasy");
+     }
+
+     notActiveConfig(parentId){
+         let parent = document.getElementById(parentId);
+         let size = parent.childNodes.length;
+         for(var i=0; i<size; i++){
+             let element = parent.childNodes[i];
+             if(element.className=="configText")
+                element.style.backgroundColor="lightgrey";
+         }
+     }
+     activeConfig(elementId){
+         let element = document.getElementById(elementId);
+         element.style.backgroundColor= "green";
+     }
+     addConfigHandlers(){
+        let choosedWhiteDisk = document.getElementById("chooseWhiteDisk");
+        
+        let chooseBlackDisk = document.getElementById("chooseBlackDisk");
+        
+        chooseBlackDisk.addEventListener("click", ()=>{
+            this.computerPlayer = WHITE_DISK;
+            this.notActiveConfig("colorDisk");
+            this.activeConfig("chooseBlackDisk");
+            game.refreshSettings();
+            
+        } );
+
+        choosedWhiteDisk.addEventListener("click", ()=>{
+            this.computerPlayer = BLACK_DISK;
+            this.notActiveConfig("colorDisk");
+            this.activeConfig("chooseWhiteDisk");
+            game.refreshSettings();
+        }
+
+        );
+
+        let difficultyEasy = document.getElementById("chooseEasy");
+        let difficultyMedium = document.getElementById("chooseMedium");
+        let difficultyHard = document.getElementById("chooseHard");
+
+        difficultyEasy.addEventListener("click", ()=>{
+            this.difficulty=1;
+            this.notActiveConfig("gameDifficulty");
+            this.activeConfig("chooseEasy");
+            game.refreshSettings();
+
+        });
+        difficultyMedium.addEventListener("click", ()=>{
+            this.difficulty=2;
+            this.notActiveConfig("gameDifficulty");
+            this.activeConfig("chooseMedium");
+            game.refreshSettings();
+
+        });
+        difficultyHard.addEventListener("click",()=>{
+            this.difficulty=3;
+            this.notActiveConfig("gameDifficulty");
+            this.activeConfig("chooseHard");
+            game.refreshSettings();
+        });
+ }
+};
 
  class GameState{
     constructor(parentId){
@@ -82,10 +160,12 @@
        this.text = document.createElement("div");
        this.text.appendChild(document.createTextNode("Turno de"));
        this.text.id="shiftText";
+     
        this.disk = document.createElement("div");
        this.disk.id = "diskMessage";
        this.currDisk = document.createElement("div");
        this.currDisk.className = startPlayer;
+     
        this.disk.appendChild(this.currDisk);
        
        this.playing.appendChild(this.text);
@@ -104,9 +184,11 @@
     }
 
     changePlayerTurn(playerColor){
-        this.temp = document.createElement("div");
-        this.temp.className=playerColor;
-        this.disk.replaceChild(this.temp, this.disk.childNodes[0]);
+        this.currDisk.className = playerColor;
+
+        let childNodes = this.playing.childNodes;
+        this.playing.replaceChild(this.text, childNodes[0]);
+        this.playing.replaceChild(this.disk, childNodes[1]);
     }
 
     unableToPlayMessage(){
@@ -118,7 +200,11 @@
         this.playing.replaceChild(this.skipButton, this.playing.childNodes[1]);
     }
     displayVictoryOrDefeat(victory){
-
+        
+        let numChilds = this.playing.childNodes.length;
+        for(var i=0; i<numChilds; i++){
+            this.playing.removeChild(this.playing.childNodes[0]);
+        }
         this.message = document.createElement("div");
         this.message.className="messageText";
         if(victory){
@@ -127,22 +213,22 @@
         else{
             this.message.innerHTML = "Perdeste o jogo";
         }
-        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
-        this.playing.removeChild(this.playing.childNodes[1]);
+        
+        this.playing.appendChild(this.message);
     }
 
     giveUpMessage(){
         this.message = document.createElement("div");
         this.message.className="messageText";
         this.message.innerHTML = "Perdeste por desistência";
-        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
-        this.playing.removeChild(this.playing.childNodes[1]);
-
+        let numChilds = this.playing.childNodes.length;
+        for(var i=0; i<numChilds; i++){
+            this.playing.removeChild(this.playing.childNodes[0]);
+        }
+        this.playing.appendChild(this.message);
+       
     }
 };
-
-
- 
 
  class Player{
      constructor(color){
@@ -229,13 +315,42 @@ class GameBoard{
 
 };
 
+class RestartGame{
+    constructor(parentId){
+        this.parent = document.getElementById(parentId);
+        this.restart = document.createElement("button");
+        this.restart.innerHTML="Jogar Novamente"
+        this.restart.id="restartButton";
+        this.parent.appendChild(this.restart);
+        this.addHandlers();
+    }
+
+    showRestartGame(){
+        this.restart.style.display = "inline";
+    }
+
+    addHandlers(){
+        let restart = document.getElementById("restartButton");
+
+        restart.addEventListener("click", ()=>{
+            restartGame();
+        });
+
+    }
+
+};
+
 class GameController{
     constructor(parentId){
         this.whiteDisksPlayer = new Player(WHITE_DISK);
         this.blackDisksPlayer = new Player(BLACK_DISK);
+        this.configs = configs;
         
         this.currPlayer = this.blackDisksPlayer;
         this.nextPlayer = this.whiteDisksPlayer;
+        this.computerPlayer;
+
+        this.difficulty;
         
         this.gameState = new GameState(parentId);
         this.playState = new MessageBoard(parentId, this.currPlayer.diskColor );
@@ -244,17 +359,32 @@ class GameController{
         
         this.nextAvailablePositions = [];
         
-
-
-        this.computerPlayer= this.whiteDisksPlayer.diskColor;
+        this.restart = new RestartGame(parentId);
 
         this.gameState.updateDiskState(this.whiteDisksPlayer.disks, this.blackDisksPlayer.disks);
         
+        this.initConfigs();
         this.addHandlers();
 
         this.startGame();
     }
 
+    initConfigs(){
+        let computerPlayer = this.configs.computerPlayer;
+        if(computerPlayer == WHITE_DISK){
+            this.computerPlayer = WHITE_DISK;
+        }
+        else{
+            this.computerPlayer =BLACK_DISK;
+        }
+
+        this.difficulty = this.configs.difficulty;
+    }
+
+    refreshSettings(){
+        this.initConfigs();
+        this.startGame();
+    }
     
     startGame(){
         this.addDisk(3,3,this.whiteDisksPlayer);
@@ -264,9 +394,8 @@ class GameController{
         
         this.getNextAvailablePosition(this.currPlayer);
         this.displayNextAvailable();  
-        if(this.currPlayer == this.computerPlayer){
-            let cell = this.computerPlay();
-            this.onClick(cell);
+        if(this.currPlayer.diskColor == this.computerPlayer){
+            this.computerPlay();
         }
     }
 
@@ -292,7 +421,7 @@ class GameController{
         
         this.playState.giveUp.addEventListener("click", this.giveUp.bind(this));
 
-        
+        //Add click handlers to board cells
         for(var i=0; i<8; i++){
             for(var j=0; j<8; j++){
                 let cell = this.gameBoard.gameView[i][j];
@@ -301,8 +430,7 @@ class GameController{
             }
         }
 
-    }
-
+        }
 
     unableToPlay(){
         
@@ -318,8 +446,6 @@ class GameController{
             this.endGame(false);
         }
         
-        
-
     }
     giveUp(){
         this.endGame(true);
@@ -352,8 +478,9 @@ class GameController{
         this.gameBoard.board.style.setProperty("opacity", 0.2);
 
         this.updateClassifications(victory);
-        exit();
 
+        this.restart.showRestartGame();
+    
     }
 
     skipTurn(){
@@ -694,18 +821,18 @@ class GameController{
     }
 
     updateClassifications(victory){
-        this.victorys = document.getElementById("victorys");
-        this.victoryNum = document.getElementById("victorys").textContent;
-        this.defeats = document.getElementById("defeats");
-        this.defeatsNum = document.getElementById("defeats").textContent;
+        const victorys = document.getElementById("victorys");
+        const victoryNum = document.getElementById("victorys").textContent;
+        const defeats = document.getElementById("defeats");
+        const defeatsNum = document.getElementById("defeats").textContent;
 
         if(victory){
-            this.num = Number(this.victoryNum +1 );
-            this.victorys.innerHTML=this.num;
+            let num = Number(victoryNum) +1 ;
+            victorys.innerHTML=num;
         }
         else{
-            this.num = Number(this.defeatsNum +1);
-            this.defeats.innerHTML= this.num;
+            let num = Number(defeatsNum) +1 ;
+            defeats.innerHTML= num;
         }
 
 
@@ -713,9 +840,20 @@ class GameController{
     
 };
 
+function restartGame(){
+
+    let gameObject = document.getElementById("gameBoard");
+    let numChilds = gameObject.childNodes.length;
+    let childNodes = gameObject.childNodes;
+    for(var i=0; i<numChilds; i++){
+        gameObject.removeChild(childNodes[0]);
+    }
+
+    game = new GameController("gameBoard");
+}
 window.onload = function () {
-    
-        new GameController("gameBoard");
+    configs = new Configs();
+    game = new GameController("gameBoard");
      
     
 }
