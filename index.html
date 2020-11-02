@@ -5,16 +5,10 @@
 <!-----------------CSS files------------------------------>
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
-    <link rel="stylesheet" href="CSS/versus.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
     <link rel="stylesheet" href="CSS/gameBoard.css" type="text/css">
     <link rel="stylesheet" href="CSS/classification.css" type="text/css">
     <link rel="stylesheet" href="CSS/configurations.css" type="text/css">
-
-     <!---------------Scripts files-------------->
-     <script src="scripts/gameBoardGenerator.js"></script> 
-     <script src="scripts/NavMenus.js"></script>
-     <script src="scripts/collapsible.js"></script>
 
      <title>Othello</title>
     </head>
@@ -168,6 +162,7 @@
                     </div>
                 </form>
             </div>
+    </div>
 
         <!--Sing up -->
 
@@ -206,20 +201,6 @@
             <div id="ai-game" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
                 <div id="gameBoard">  </div>
-                
-                <!--<div class="overlay-content">
-                    <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Jogador vs Jogador</b></h1></button>
-                        <div class="ov-content-collapsible">  </div>
-                    </div>
-                </div><br>
-                
-                <div class="overlay-content">
-                    <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Jogador vs Computador</b></h1></button>
-                        <div class="ov-content-collapsible">
-                        </div>
-                </div><br>    -->        
             </div>
 	    
       <!-------------Classificaçoes----------->
@@ -263,7 +244,11 @@
                 <span id= "chooseHard" class="configText"> Difícil</span>
             </div>
     </div>
+
+    <!---------------Scripts files-------------->
+    <script src="scripts/gameBoardGenerator.js"></script> 
+    <script src="scripts/NavMenus.js"></script>
+    <script src="scripts/collapsible.js"></script>
                 
     </body>
 </html>
-
