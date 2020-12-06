@@ -13,6 +13,22 @@
      <title>Othello</title>
     </head>
     <body>
+    <div id="popUpDiv">
+       <div id="loginForm">    
+         <div class="container">
+                <h2>Login </h2>
+                 
+                <input id="uname" class="input-text" type="text" placeholder="Utlizador" name="uname" required>
+                <p></p>
+                
+                <input id="pass" class="input-text" type="password" placeholder="Palavra-passe" name="pass" required>
+                <p></p>
+                <button type="button" onclick="loginForm();" class="login-cancelbtn">Entrar</button>
+               
+            </div>
+         </div> 
+        </div>               
+      </div>
        
 
     	<div class="page-container">
@@ -35,6 +51,7 @@
                       
 		    </div>
 		</div>
+	<div id="winner"> 
 <!-----------------------Intruçoes----------------------------->
  <div id="instruction-page" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('instruction-page')">&times;</a>
@@ -249,6 +266,8 @@
     <script src="scripts/gameController.js"></script> 
     <script src="scripts/NavMenus.js"></script>
     <script src="scripts/collapsible.js"></script>
-                
+    <script src="scripts/account.js"></script>
+    <script src="scripts/register.js"></script>   
+	    
     </body>
 </html>
