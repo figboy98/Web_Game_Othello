@@ -2,10 +2,7 @@
  let configs;
  let gui;
  let game;
- const NICK = "fig";
- const PASSWD = "ola";
- const NICK2 = "fsilva";
- const PASSWD2 = "123";
+ 
  const GROUP = "3";
  const URL = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 //Color of the disks
@@ -124,7 +121,7 @@ class GameControllerLocal{
     }
     
     startGame(){
-        this.changePlayerTurn();
+        this.playState.changePlayerTurn(this.currPlayer.diskColor,true);        
         this.addDisk(3,3,this.whiteDisksPlayer);
         this.addDisk(4,4,this.whiteDisksPlayer);
         this.addDisk(3,4,this.blackDisksPlayer);
@@ -591,11 +588,6 @@ class GameControllerServer{
         this.restart = gui.restart;
         this.logged=false;
 
-        //  var a = prompt("Nick:");
-        //  this.nick = a;
-        //  var b = prompt("Pass:");
-        //  this.pass = b;  
-        
         this.eventSource; 
 
         this.getUsersCreds();
@@ -605,7 +597,6 @@ class GameControllerServer{
         if(this.logged==true){
             this.initGame();
         }
-        
 
     }
 
@@ -614,8 +605,10 @@ class GameControllerServer{
         this.pass = passwd;
 
         if(this.nick == undefined || this.pass == undefined){
-            alert("Please loggin");
+            alert("Tens de fazer login");
             this.logged = false;
+        
+
         }
         else{
             this.logged=true;
@@ -629,8 +622,6 @@ class GameControllerServer{
          let joinResponse;
 
          joinResponse = await this.join();
-         
-
 
         if(joinResponse.ok){
             let data = await joinResponse.json();
@@ -643,24 +634,11 @@ class GameControllerServer{
                 this.color = WHITE_DISK;
                 this.opColor = BLACK_DISK;
             }
-            this.eventSource = this.openSSE();
+            this.eventSource = this.ServerSentEvents();
         }
         else{
             alert("Erro de Join");
         }
-    }
-
-    async register(){
-        let player = { 
-            nick:this.nick, 
-            pass:this.pass};
-        let playerJson = JSON.stringify(player);
-        let response = await fetch(URL+"register", {
-            method: 'POST',
-            body: playerJson
-        });
-        
-        return response;
     }
 
     async join(){
@@ -680,7 +658,7 @@ class GameControllerServer{
         
     }   
 
-      openSSE(){
+      ServerSentEvents(){
         const url = URL + "update?" + "nick=" + this.nick + "&game=" + this.game;
         const urlSend = encodeURI(url);
 
@@ -696,9 +674,11 @@ class GameControllerServer{
             const data = JSON.parse(event.data);
             
             if("winner" in data){
+                this.updateBoard(data);
+                this.updateCount(data);
                 this.endGame(data);
             }
-           else if("error" in data){
+            else if("error" in data){
                 alert(JSON.stringify(data));
             } 
             else if ("board" in data){
@@ -765,6 +745,7 @@ class GameControllerServer{
     }
 
     skipTurn(){
+        //Send notify with move as null
         this.notify(-1,-1);
 
 
@@ -982,9 +963,7 @@ class MessageBoard{
         this.message.className="messageText";
         
         this.playing.replaceChild(this.message, this.playing.childNodes[0]);
-        //this.playing.replaceChild(this.skipButton, this.playing.childNodes[1]);
         this.playing.removeChild(this.playing.childNodes[1])
-
 
     }
 
@@ -1203,9 +1182,14 @@ class Configs{
        chooseVsPlayer.addEventListener("click", () =>{
            this.playerVsComputer=false;
            this.playerVsPlayer = true;
-           this.notActiveConfig("gameType");
-           this.activeConfig("chooseVsPlayer");
-           refreshSettings();
+           if(isLoged){
+               this.notActiveConfig("gameType");
+               this.activeConfig("chooseVsPlayer");
+               refreshSettings();
+           }
+           else{
+               alert("Tens de fazer login primeiro");
+           }
        });
 
 
@@ -1272,6 +1256,8 @@ function restartGame(){
 function refreshSettings(){
     removeGUI();
     gui = new BuildGUI("gameBoard");
+
+
     if(configs.playerVsComputer){
         game =   new GameControllerLocal(gui,configs);
     }
@@ -1283,9 +1269,5 @@ function refreshSettings(){
 window.onload = function () {
     configs = new Configs();
     gui = new BuildGUI("gameBoard");
-    game = new GameControllerLocal(gui,configs);
-    //game = new GameControllerServer(gui);
-   
-     
-    
+    game = new GameControllerLocal(gui,configs);   
 }
