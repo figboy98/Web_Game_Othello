@@ -24,6 +24,7 @@ function register(nick, pass){
       } else {
         x.style.display = "none";
       }
+      tmp.innerHTML = null;
       isLoged=true;
     }
   })
