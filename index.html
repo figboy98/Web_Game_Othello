@@ -2,7 +2,11 @@
 <html lang="pt">
     <head>
     <meta charset="UTF-8">
-<!-----------------CSS files------------------------------>
+
+    <!---
+                    CSS files
+    -->
+
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <link rel="stylesheet" href="CSS/overlay.css" type="text/css">
     <link rel="stylesheet" href="CSS/login.css" type="text/css">
@@ -24,8 +28,6 @@
                 <input id="pass" class="input-text" type="password" placeholder="Palavra-passe" name="pass" required>
                 <p></p>
                 <button type="button" onclick="loginForm();" class="login-cancelbtn">Entrar</button>
-               
-            </div>
          </div> 
         </div>               
       </div>
@@ -34,12 +36,12 @@
     	<div class="page-container">
             <div class="content-wrap">
             	<header class="navbar" style="z-index: 1">
-                            <img src="img/logo.png" alt="logo" class="logo" width="8%">
+                            <img src="img/logo.png" alt="logo" class="logo" width="80" >
                             <div><h1>&nbsp;&nbsp;&nbsp;&nbsp;Othello</h1></div>
 
                             <nav>
                                 <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
-                                <a><span onclick="showLogin();"><b>Login</b></span></a> 
+                                <!-- <a><span onclick="showLogin();"><b>Login</b></span></a>  -->
                                 <a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a>
                                 <a><span onclick="openMenu('classi');"><b>Classificações</b></span></a>
                                 <a><span onclick="openMenu('configurations');"><b>Configurações</b></span></a>
@@ -52,14 +54,17 @@
 		    </div>
 		</div>
 	<div id="winner"> 
-<!-----------------------Intruçoes----------------------------->
+
+        <!--
+                Instruçoes
+        -->
  <div id="instruction-page" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('instruction-page')">&times;</a>
                 <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Tabulerio</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Tabulerio</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_1.png">
+                        	<img src = "img/t_1.png" alt="Tabuleiro">
                             <p>&#9642;Tabuleiro quadrado,contendo uma grelha com 8 linhas por 8 colunas;</p>
                             <p><b>&#9642;Não </b> xadrezado, contrariamente às damas ou ao xadrez</p>
                             <p>&#9642;O fundo geralmente é verde.</p>
@@ -69,7 +74,7 @@
                 </div><br>
                 <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Peças/Discos</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Peças/Discos</b></button>
                         <div class="ov-content-collapsible">
                            <p>&#9642;As peças denominam-se <b>discos</b>;</p>
                            <p>&#9642;São circulares;</p>
@@ -84,9 +89,9 @@
                 </div><br>
                  <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Início do jogo</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Início do jogo</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_2.png">
+                        	<img src = "img/t_2.png" alt="Tabuleiro">
                            <p>&#9642;Na posição inicial há 4 peças: 2 de cada uma das 2 tonalidades (claro e escuro);</p>
                            <p>&#9642;Colocadas nas casas centrais;</p>
                            <p>&#9642;Peças da mesma tonalidade ficam em diagonal;</p> 
@@ -97,9 +102,9 @@
                 </div><br>
                  <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Jogar I</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Jogar I</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_3.png">
+                        	<img src = "img/t_3.png" alt="Tabuleiro">
                            <p>&#9642;Durante o jogo os jogadores jogam alternadamente;</p>
                            <p>&#9642;Colocam uma peça da sua cor numa casa livre;</p>
                            <p>&#9642;Se na mesma linha, coluna ou diagonal da peça jogada, peças da cor contrária viram para a cor do jogador, <b>só pode ser jogada uma peça se for virada alguma</b>;</p> 
@@ -109,9 +114,9 @@
                 </div><br>
                  <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Jogar II</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Jogar II</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_4.png">
+                        	<img src = "img/t_4.png" alt="Tabuleiro">
                            <p>&#9642;A peça colocada pode virar várias peças do adversário que estão na mesma linha coluna ou diagonal da peça jogada, desde que:</p>
                            <p> -num dos extremos esteja a peça jogada</p>
                            <p> -e no outro esteja uma peça do mesmo tom;</p> 
@@ -120,9 +125,9 @@
                 </div><br>
                  <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Jogar III</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Jogar III</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_5.png">
+                        	<img src = "img/t_5.png" alt="Tabuleiro">
                            <p>&#9642;Podem ser viradas várias peças consecutivas do adversário, na mesma linha, coluna ou diagonal. Desde que delimitadas pela peça jogada e outra do mesmo tom (do jogador)</p>
                           
                         </div>
@@ -130,9 +135,9 @@
                 </div><br>
 			<div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Passar</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Passar</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_6.png">
+                        	<img src = "img/t_6.png" alt="Tabuleiro">
                            <p>&#9642;Na sua vez, o jogador só pode jogar se virar peças;</p>
                            <p>&#9642;Caso conrário não poderá jogar e terá de passar a jogada;</p>
                            <p>Mas só pode passar se não tiver jogada possível.</p>
@@ -142,9 +147,9 @@
                 </div><br>
                 <div class="overlay-content">
                     <div>
-                        <button type="button" class="ov-collapsible"><h1><b>Terminar</b></h1></button>
+                        <button type="button" class="ov-collapsible"><b>Terminar</b></button>
                         <div class="ov-content-collapsible">
-                        	<img src = "img/t_7.png">
+                        	<img src = "img/t_7.png" alt="Tabuleiro">
                            <p>&#9642;O jogo termina quando nenhum jogador pode jogar, geralmente quando o tabuleiro está todo preenchido. Mas não necessariamente (ver exemplo da imagem);</p>
                            <p><b>Ganha o jogador com maior número de peças.</b></p>
                           
@@ -159,7 +164,7 @@
 
                     <div class="login-container">
                         <label for="uname"><b>Utilizador</b></label>
-                        <input type="text" name="uname" required>
+                        <input id="uname" type="text" name="uname" required>
 
                         <label for="psw"><b>Palavra-passe</b></label>
                         <input type="password" name="psw" required>
@@ -181,9 +186,9 @@
             </div>
     </div>
 
-        <!--Sing up -->
+        <!-- Sign up -->
 
-            <div id="singup-form" class="modal">
+            <!-- <div id="singup-form" class="modal">
                 <span onclick="hideRegister();" 
                 class="close-login" title="Close Form">&times;</span>
                
@@ -210,17 +215,17 @@
                         <button type="button" onclick="hideRegister()" class="login-cancelbtn">Cancelar</button>
                     </div>
                 </form>
-            </div>
+            </div> -->
 </div>
 </div>
   
-        <!-------------Play game----------->
+        <!--Play game-->
             <div id="ai-game" class="overlay">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('ai-game')">&times;</a>
                 <div id="gameBoard">  </div>
             </div>
 	    
-      <!-------------Classificaçoes----------->
+      <!--Classificaçoes-->
       <div id="classi" class= "overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('classi')">&times;</a>
             <table id="classifications">
@@ -238,7 +243,7 @@
     </div>
 
 
-    <!----------------Configurações---------------->
+    <!--Configurações-->
     <div id="configurations" class= "overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('configurations')">&times;</a>
         <div id="configs">
@@ -254,20 +259,22 @@
                 <span id="chooseBlackDisk" class ="configText"> Preto </span>
             </div>
     
-            <div class="options" d="gameDifficulty">
+            <div class="options" id="gameDifficulty">
                 <span> Nivel de dificuldade: </span>
-                <span id="chooseEasy" class="configText"> Fácil</span>
-                <span id="chooseMedium"class="configText"> Médio</span>
-                <span id= "chooseHard" class="configText"> Difícil</span>
+                <span id="chooseEasy"   class="configText"> Fácil</span>
+                <span id="chooseMedium" class="configText"> Médio</span>
+                <span id= "chooseHard"  class="configText"> Difícil</span>
             </div>
+        </div>
     </div>
 
-    <!---------------Scripts files-------------->
+    <!--Scripts files-->
+    <script src="scripts/account.js"></script>
+    <script src="scripts/register.js"></script> 
     <script src="scripts/gameController.js"></script> 
     <script src="scripts/NavMenus.js"></script>
     <script src="scripts/collapsible.js"></script>
-    <script src="scripts/account.js"></script>
-    <script src="scripts/register.js"></script>   
+     
 	    
     </body>
 </html>

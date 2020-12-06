@@ -124,6 +124,7 @@ class GameControllerLocal{
     }
     
     startGame(){
+        this.changePlayerTurn();
         this.addDisk(3,3,this.whiteDisksPlayer);
         this.addDisk(4,4,this.whiteDisksPlayer);
         this.addDisk(3,4,this.blackDisksPlayer);
@@ -137,14 +138,17 @@ class GameControllerLocal{
     }
 
 //function that chooses a random possible move and simulates a click in that cell for the computer player
-    computerPlay(){teste
-        let cell = this.nextAvailablePositions[rand];
-        if(size==0){
-            this.unableToPlay();
-            return;
-        }
-        setTimeout(() => {  this.onClick(cell); }, 500);
+computerPlay(){
+    let size = this.nextAvailablePositions.length;
+    let rand = this.randomIntFromInterval(0, size-1);
+
+    let cell = this.nextAvailablePositions[rand];
+    if(size==0){
+        this.unableToPlay();
+        return;
     }
+    setTimeout(() => {  this.onClick(cell); }, 500);
+}
 
     randomIntFromInterval(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -294,8 +298,13 @@ class GameControllerLocal{
         let temp = this.currPlayer;
         this.currPlayer=this.nextPlayer;
         this.nextPlayer = temp;
+        let flag=true;
 
-        this.playState.changePlayerTurn(this.currPlayer.diskColor);
+        if(this.currPlayer.diskColor == this.computerPlayer){            
+            flag = false;
+        }
+
+        this.playState.changePlayerTurn(this.currPlayer.diskColor,flag);
     }
 
     getNextPositions(i,j){
@@ -580,32 +589,47 @@ class GameControllerServer{
         this.gameState = gui.gameState;
         this.messageBoard = gui.playState;
         this.restart = gui.restart;
+        this.logged=false;
 
-         var a = prompt("Nick:");
-         this.nick = a;
-         var b = prompt("Pass:");
-         this.pass = b;  
+        //  var a = prompt("Nick:");
+        //  this.nick = a;
+        //  var b = prompt("Pass:");
+        //  this.pass = b;  
         
         this.eventSource; 
 
-        this.addClickHandlers();
+        this.getUsersCreds();
 
-        this.initGame();
+        this.addClickHandlers();
+        
+        if(this.logged==true){
+            this.initGame();
+        }
         
 
     }
 
+    getUsersCreds(){
+        this.nick = usrNick;
+        this.pass = passwd;
+
+        if(this.nick == undefined || this.pass == undefined){
+            alert("Please loggin");
+            this.logged = false;
+        }
+        else{
+            this.logged=true;
+        }
+    }
+
     
      async initGame(){
-         let RegResponse = await this.register();
+         this.messageBoard.displayWaiting();
+         
          let joinResponse;
-        
-         if(RegResponse.ok){
-             joinResponse = await this.join();
-         }
-         else{
-             alert("Erro registo");
-         }
+
+         joinResponse = await this.join();
+         
 
 
         if(joinResponse.ok){
@@ -663,7 +687,7 @@ class GameControllerServer{
         let eventSource = new EventSource(urlSend);
        
         eventSource.onopen = function(){
-            alert("Jogo começou");
+
 
         }.bind(this);
 
@@ -745,22 +769,7 @@ class GameControllerServer{
 
 
     }
-    async leave(){
-        let player = {
-            nick:this.nick, 
-            pass:this.pass,
-            game:this.game
-        } 
-
-        let playerJson = JSON.stringify(player);
-
-        let response = await fetch(URL+"leave", {
-            method: 'POST',
-            body: playerJson
-        });
-
-        let data = await response.json();
-    }
+  
 
    async endGame(data){
         let player = data["winner"];
@@ -793,11 +802,33 @@ class GameControllerServer{
         }
 
         //Click handler for the skip button
-
         this.messageBoard.skipButton.addEventListener("click", this.skipTurn.bind(this));
-
-
+        //Click handler for the give up button
+        this.messageBoard.giveUp.addEventListener("click", this.giveUp.bind(this));
     }
+
+    async giveUp(){
+        await this.leave();
+        this.eventSource.close();
+        this.restart.showRestartGame();    }
+
+    async leave(){
+        let player = {
+            nick:this.nick, 
+            pass:this.pass,
+            game:this.game
+        } 
+
+        let playerJson = JSON.stringify(player);
+
+        let response = await fetch(URL+"leave", {
+            method: 'POST',
+            body: playerJson
+        });
+
+        let data = await response.json();
+    }
+
     async notify(i,j){
             let move;
       
@@ -903,16 +934,18 @@ class MessageBoard{
 
     changePlayerTurn(playerColor,myTurn){
         this.currDisk.className = playerColor;
-        let text;
         if(myTurn ==true){
             this.text.innerHTML = "Turno de (Eu)";
         }
         else{
             this.text.innerHTML = "Turno de (Op)";
         }
+
         let childNodes = this.playing.childNodes;
         this.playing.replaceChild(this.text, childNodes[0]);
         this.playing.replaceChild(this.disk, childNodes[1]);
+        this.playing.append(this.giveUp); 
+
     }
 
     unableToPlayMessage(){
@@ -940,6 +973,19 @@ class MessageBoard{
         }
         
         this.playing.appendChild(this.message);
+    }
+
+    displayWaiting(){
+        this.message = document.createElement("div");
+        this.message.innerHTML = "Sem jogadas possíveis";
+        this.message.innerHTML = "À espera de oponente"
+        this.message.className="messageText";
+        
+        this.playing.replaceChild(this.message, this.playing.childNodes[0]);
+        //this.playing.replaceChild(this.skipButton, this.playing.childNodes[1]);
+        this.playing.removeChild(this.playing.childNodes[1])
+
+
     }
 
     displayDraw(){
@@ -1237,7 +1283,7 @@ function refreshSettings(){
 window.onload = function () {
     configs = new Configs();
     gui = new BuildGUI("gameBoard");
-    game = new GameControllerLocal(gui,conf);
+    game = new GameControllerLocal(gui,configs);
     //game = new GameControllerServer(gui);
    
      
