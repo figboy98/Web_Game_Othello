@@ -1,5 +1,8 @@
 
 function openMenu(element){
+    if(element == "classi"){
+        updateRanking();
+    }
     document.getElementById(element).style.width="100%";
     document.getElementById(element).style.overflowY="scroll";
     //document.getElementById("copy").style.visibility = "hidden";

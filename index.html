@@ -41,7 +41,6 @@
 
                             <nav>
                                 <a><span onclick="openMenu('instruction-page');"><b>Instruções</b></span></a>
-                                <!-- <a><span onclick="showLogin();"><b>Login</b></span></a>  -->
                                 <a><span onclick="openMenu('ai-game');"><b>Jogar</b></span></a>
                                 <a><span onclick="openMenu('classi');"><b>Classificações</b></span></a>
                                 <a><span onclick="openMenu('configurations');"><b>Configurações</b></span></a>
@@ -53,7 +52,8 @@
                       
 		    </div>
 		</div>
-	<div id="winner"> 
+    
+        <div id="winner"> 
 
         <!--
                 Instruçoes
@@ -157,69 +157,7 @@
                     </div>
                 </div>
             
-            <!-- <div id="login-form" class="modal">
-                <span onclick="hideLogin();" 
-                class="close-login" title="Close Form">&times;</span> -->
-                
-                
-                <!-- Modal Content -->
-                <!-- <form class="login-modal-content animate" action="#">
-                    
-
-                    <div class="login-container">
-                        <label for="uname"><b>Utilizador</b></label>
-                        <input id="uname" type="text" name="uname" required>
-
-                        <label for="psw"><b>Palavra-passe</b></label>
-                        <input type="password" name="psw" required>
-
-                        <button class= "submit" type="submit">Entrar</button>
-                        <label>
-                            <input type="checkbox" checked="checked" name="remember">Lembrar-me
-                        </label>
-                    </div>
-
-                    <div class="login-container" style="background-color: green">
-                        <button type="button" onclick="hideLogin();" class="login-cancelbtn">Cancelar</button>
-                         <span class="psw"><a href="#">
-                          Recuperar a palavra-passe?</a><b> ou <br/></b></span>
-
-                        <span class="psw"> <a href="#" onclick="showRegister();">Criar uma nova conta</a></span>
-                    </div>
-                </form>
-            </div> 
-    </div> -->
-
-        <!-- Sign up -->
-
-            <!-- <div id="singup-form" class="modal">
-                <span onclick="hideRegister();" 
-                class="close-login" title="Close Form">&times;</span>
-               
-                <form class="login-modal-content animate" action="#">
-                   
-
-                    <div class="login-container">
-                        <label for="uname"><b>Utilizador</b></label>
-                        <input type="text" placeholder="Introduza um nome de Utilizador" name="uname" required>
-                        
-                        <label for="emai"><b>Email</b></label>
-                        <input type="email" placeholder="Introduza uma conta de email" name="emai" required>
-
-                        <label for="psw"><b>Palavra-passe</b></label>
-                        <input type="password" placeholder="Introduza uma palavra-passe" name="psw" required>
-
-                        <button class= "submit" type="submit">Criar nova conta</button>
-                        <label>
-                            <input type="checkbox" checked="checked" name="remember">Lembrar-me
-                        </label>
-                    </div>
-
-                    <div class="login-container" style="background-color: green">
-                        <button type="button" onclick="hideRegister()" class="login-cancelbtn">Cancelar</button>
-                    </div>
-                </form>
-            </div>  -->
+           
 </div>
 </div>
   
@@ -232,18 +170,7 @@
       <!--Classificaçoes-->
       <div id="classi" class= "overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu('classi')">&times;</a>
-            <table id="classifications">
-                <tr>
-                    <th> Jogador</th>
-                    <th> Vitórias</th>
-                    <th> Derrotas</th>
-                </tr>
-                <tr>
-                    <td id="playerName"> jogador </td>
-                    <td id="victorys"> 0</td>
-                    <td id="defeats"> 0</td>
-                </tr>
-            </table>        
+            <div id = "classifications"></div> 
     </div>
 
 
@@ -273,6 +200,7 @@
     </div>
 
     <!--Scripts files-->
+    <script src = "scripts/ranking.js"></script>
     <script src="scripts/account.js"></script>
     <script src="scripts/register.js"></script> 
     <script src="scripts/gameController.js"></script> 

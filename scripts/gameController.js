@@ -665,8 +665,6 @@ class GameControllerServer{
         let eventSource = new EventSource(urlSend);
        
         eventSource.onopen = function(){
-
-
         }.bind(this);
 
         eventSource.onmessage = function(event){
@@ -747,8 +745,6 @@ class GameControllerServer{
     skipTurn(){
         //Send notify with move as null
         this.notify(-1,-1);
-
-
     }
   
 
@@ -789,9 +785,10 @@ class GameControllerServer{
     }
 
     async giveUp(){
-        await this.leave();
-        this.eventSource.close();
-        this.restart.showRestartGame();    }
+     this.eventSource.close();
+     await this.leave();
+     this.gameBoard.board.style.setProperty("opacity", 0.2);
+     this.restart.showRestartGame();    }
 
     async leave(){
         let player = {
@@ -1042,6 +1039,7 @@ class RestartGame{
 
     showRestartGame(){
         this.restart.style.display = "inline";
+        
     }
 
     addHandlers(){

@@ -1,6 +1,7 @@
 const urlBase = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 var tmp;
 var isLoged=false; 
+var errorLog=false;
 
 function register(nick, pass){
 
@@ -15,6 +16,7 @@ function register(nick, pass){
       console.log(data.error);
       tmp = document.getElementById("winner");
       tmp.innerHTML = data.error;
+      errorLog = true;
     }
     else
     {
@@ -24,7 +26,9 @@ function register(nick, pass){
       } else {
         x.style.display = "none";
       }
-      tmp.innerHTML = null;
+      if(errorLog==true){
+        tmp.innerHTML = null;
+      }
       isLoged=true;
     }
   })

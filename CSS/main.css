@@ -40,9 +40,9 @@ header.navbar{
         text-transform: uppercase;
     }
     header.navbar nav{
-        margin-right: 10%;
-        float: right;
-        width: 30%;
+        margin-left: 30px;
+        /* float: right; */
+        width: 70%;
         text-align: right;
         padding-bottom: 0;
         overflow: hidden;
@@ -54,7 +54,7 @@ header.navbar{
             text-transform: uppercase;
             text-align: center;
             font-size: 16.3px;
-            padding: 10px 50px 5px 0.5%;   
+            padding: 10px 50px 5px 0.5%;
             display: table-cell;
             white-space: nowrap; 
         }

@@ -1,10 +1,22 @@
 #classifications{
     padding:10px;
     margin-top: 200px;
-    margin-left: 1000px;
+    margin-left: 700px;
     margin-right: 200px;
-    margin-bottom: 200px;
+    margin-bottom: 200px; 
     color: black;
     font-size: x-large;
-   
+}
+
+.rank{
+    width: 200px;
+    display: inline;
+    color:black;
+    margin-left: 20px;
+    text-align: center;
+}
+.rankLine{
+    width: 400px;
+    height: 30px;
+    padding: 10px;
 }
