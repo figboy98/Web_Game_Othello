@@ -19,4 +19,12 @@
     width: 400px;
     height: 30px;
     padding: 10px;
+    background-color:green;
+    border:1px solid black;
+    display:inline-block;
+    color:green;
+    font-family:verdana;
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%
 }
