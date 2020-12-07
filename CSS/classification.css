@@ -9,8 +9,8 @@
 }
 
 .rank{
-    width: 200px;
-    display: inline;
+    display: inline-block;
+    width: 100px;
     color:black;
     margin-left: 20px;
     text-align: center;
