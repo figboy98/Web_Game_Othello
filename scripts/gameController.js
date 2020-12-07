@@ -672,8 +672,6 @@ class GameControllerServer{
             const data = JSON.parse(event.data);
             
             if("winner" in data){
-                this.updateBoard(data);
-                this.updateCount(data);
                 this.endGame(data);
             }
             else if("error" in data){
@@ -697,22 +695,24 @@ class GameControllerServer{
     updateBoard(data){
 
         let board = data["board"];
+        if(board != undefined){
 
-        for(var i=0; i<8; i++){
-            for(var j=0; j<8;j++){
-                let cell = this.gameBoard.gameView[i][j];
-                let color = board[i][j];
-                let diskColor;
-                if(color == "dark") diskColor = BLACK_DISK;
-                if(color =="light") diskColor = WHITE_DISK;
-
-                if(diskColor==BLACK_DISK || diskColor == WHITE_DISK){
-                    cell.addDisk(diskColor);
+            for(var i=0; i<8; i++){
+                for(var j=0; j<8;j++){
+                    let cell = this.gameBoard.gameView[i][j];
+                    let color = board[i][j];
+                    let diskColor;
+                    if(color == "dark") diskColor = BLACK_DISK;
+                    if(color =="light") diskColor = WHITE_DISK;
+    
+                    if(diskColor==BLACK_DISK || diskColor == WHITE_DISK){
+                        cell.addDisk(diskColor);
+                    }
+    
                 }
-
-            }
         }
-    }
+        }
+}
 
     updateCount(data){
         let count = data["count"];
@@ -785,10 +785,9 @@ class GameControllerServer{
     }
 
     async giveUp(){
-     this.eventSource.close();
-     await this.leave();
-     this.gameBoard.board.style.setProperty("opacity", 0.2);
-     this.restart.showRestartGame();    }
+        await this.leave();
+           
+    }
 
     async leave(){
         let player = {
