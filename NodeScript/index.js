@@ -1,5 +1,6 @@
 const http = require('http');
 const register = require('./register');
+const ranking = require ('./ranking');
 const path = require('path');
 const url = require('url');
 
@@ -14,6 +15,9 @@ const othelloServer = http.createServer(function(req, res){
             switch(pathName){
                 case '/register':
                     register.doRegister(req,res);
+                    break;
+                case '/ranking':
+                    ranking.doGetRanking(req,res);
                     break;
               
                 default:
