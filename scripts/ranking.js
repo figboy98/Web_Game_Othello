@@ -1,4 +1,5 @@
 
+const MYURL = "http://twserver.alunos.dcc.fc.up.pt:8103/"
 async function updateRanking(){
     let data = await ranking();
     removeRanking();
@@ -68,7 +69,7 @@ function addPlayer(nick, victories, games){
 
 }
 async function ranking(){
-    let rankData = await fetch(URL+"ranking",{
+    let rankData = await fetch(MYURL+"ranking",{
         method:'POST',
         body:JSON.stringify({})
     });
