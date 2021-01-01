@@ -31,6 +31,7 @@ const othelloServer = http.createServer(function(req, res){
                 default:
                     answer = 'Erro';
             }
+            break;
         case 'GET':
             switch(pathName){
                 case '/update':

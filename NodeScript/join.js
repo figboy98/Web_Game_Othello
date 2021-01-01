@@ -18,10 +18,38 @@ class Join{
     constructor(){
         this.queue = [];
         this.waiting=false;
+        this.playersWithGame = [];
     }
+    checkPlayersWithGame(player){
+       let playerName = player["nick"];
+       let size = this.playersWithGame.length;
+        for(var i =0; i<size; i++){
+            if(this.playersWithGame[i].nick == playerName){
+                return this.playersWithGame[i];
+            }
+        }
 
+        return undefined;
+
+    }
+    removePlayerWithGane(player){
+        let playerName = player["nick"];
+        let size = this.playersWithGame.length;
+        for(var i =0; i<size; i++){
+            if(this.playersWithGame[i].nick == playerName){
+                this.playersWithGame.splice(i,1);
+            }
+        }
+
+    }
     joinPlayer(player){
         let newPlayer;
+
+        let tmp = this.checkPlayersWithGame(player);
+        
+        if(tmp !=undefined){
+            return tmp;
+        }
         
         if(!this.waiting){
             this.waiting = true;
@@ -54,6 +82,7 @@ class Join{
 
             
         }
+        this.playersWithGame.push(newPlayer);
 
         //Guardar informação deste jogo algures
 
@@ -65,20 +94,27 @@ class Join{
        if(tmp["game"] == player["game"] && tmp["nick"] == player["nick"] && tmp["pass"] == player["pass"]){
            this.queue.shift();
            this.waiting = false;
-           return true;
-       }
-       return false;
+        }
+        
+        this.removePlayerWithGane(player);
+
+    }
+
+    endGame(player){
+        let game = player["game"];
+        
+        let size = this.playersWithGame.length;
+        for(var i =0; i<size; i++){
+            if(this.playersWithGame[i].game == game){
+                this.playersWithGame.splice(i,1);
+                i -=1;
+                size -=1;
+            }
+        }
     }
 };
 
-
-
-
-
-
 let join = new Join();
-
-
 
 function doJoin(request, response){
 
@@ -126,7 +162,12 @@ function isPairing(){
     return false; 
 }
 
+function doEndGame(player){
+    join.endGame(player);
+}
+
 module.exports.doJoin = doJoin;
 module.exports.leave = leave;
 module.exports.isPairing =isPairing;
+module.exports.endGame = doEndGame;
 

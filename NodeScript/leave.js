@@ -19,12 +19,12 @@ function doLeave(request, response){
             player = JSON.parse(body);
             if(join.isPairing() == true){
                 join.leave(player);
-            }
-            else{
-        
-                //Informar jogadores da desistência com update
-        
             } 
+            else{
+                join.endGame(player);
+                // Broadcast update of give up
+
+            }
             response.writeHead(200,headers["plain"]);
             response.end();
         }
