@@ -1,6 +1,9 @@
 const http = require('http');
 const register = require('./register');
 const ranking = require ('./ranking');
+const join = require('./join');
+const leave = require('./leave');
+const html = require('./html');
 const path = require('path');
 const url = require('url');
 
@@ -19,9 +22,23 @@ const othelloServer = http.createServer(function(req, res){
                 case '/ranking':
                     ranking.doGetRanking(req,res);
                     break;
-              
+                case '/join':
+                    join.doJoin(req,res);
+                    break;
+                case '/leave':
+                    leave.doLeave(req,res);
+                    break;
                 default:
                     answer = 'Erro';
+            }
+        case 'GET':
+            switch(pathName){
+                case '/update':
+                    break;
+                default:
+                    html.deliver(pathName,req,res);
+                    break;
+
             }
     }
 });

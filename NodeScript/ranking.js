@@ -42,16 +42,14 @@ class Ranking{
         }
     }
      
-    startRanking(){
-        fs.appendFile('/Ranking.json', JSON.stringify(rankingData), function(err){
-            if(err){
-                console.log(err);
-            }
-            else{
-                console.log("writed" + data);
-                }
-            } )
-    };
+    // startRanking(){
+    //     fs.appendFile(RANKINGPATH, JSON.stringify(rankingData), function(err){
+    //         if(err){
+    //             console.log(err);
+    //         }
+           
+    //         } )
+    // };
         
     async  loadRanking(){
         try{
@@ -128,11 +126,27 @@ async function doGetRanking(request, response){
     .on('end',() =>{
         try{
             JSON.parse(body);
+            try{
+                json = {
+                    ranking: players
+                };
+                let answer = JSON.stringify(json);
+                response.writeHead(200, headers["plain"]);
+                response.write(answer + '\n\n');
+                response.end();
+            }
+            catch(err){
+                console.log(err);
+                response.writeHead(500, headers["plain"]);
+                response.write(JSON.stringify({error: "Internal error getting ranking"}));
+                response.end();
+            }
+        
         }
         catch(error){
             console.log(error.message);
             response.writeHead(400, headers["plain"]);
-            response.write(JSON.stringify({error: "Error parsing JSON request: " + err + "."}));
+            response.write(JSON.stringify({error: "Error parsing JSON request: " + error + "."}));
             response.end();
             return;
         }
@@ -145,22 +159,7 @@ async function doGetRanking(request, response){
         return;
     })
 
-    try{
-        json = {
-            ranking: players
-        };
-        let answer = JSON.stringify(json);
-        response.writeHead(200, headers["plain"]);
-        response.write(answer + '\n\n');
-        response.end();
-    }
-    catch(err){
-        console.log(err);
-        response.writeHead(500, headers["plain"]);
-        response.write(JSON.stringify({error: "Internal error getting ranking"}));
-        response.end();
-    }
-
+   
 }
 async function addPlayer(player){
     let rank = new Ranking();
