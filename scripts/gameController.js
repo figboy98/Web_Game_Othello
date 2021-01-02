@@ -5,6 +5,7 @@
  
  const GROUP = "3";
  const URL = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+ const myUrl = "http://twserver.alunos.dcc.fc.up.pt:8103/";
 //Color of the disks
 const BLACK_DISK = "black";
 const WHITE_DISK = "white";
@@ -649,7 +650,7 @@ class GameControllerServer{
         }
         let playerJson  = JSON.stringify(player);
     
-        let response = await fetch(URL+ "join", {
+        let response = await fetch(myUrl+ "join", {
             method: 'POST',
             body: playerJson
         });
@@ -798,7 +799,7 @@ class GameControllerServer{
 
         let playerJson = JSON.stringify(player);
 
-        let response = await fetch(URL+"leave", {
+        let response = await fetch(myUrl+"leave", {
             method: 'POST',
             body: playerJson
         });

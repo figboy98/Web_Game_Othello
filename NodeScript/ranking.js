@@ -4,18 +4,19 @@ const path = require('path');
 
 const RANKINGPATH = path.resolve(__dirname, 'ranking.json');
 
-// let rankingData =[ 
-//      {nick: "123", victories: 354, games: 627},
-//      {nick: "fig", victories: 354, games: 627},
-//      {nick: "a", victories: 276, games: 565},
-//      {nick: "tati123", victories: 252, games: 444},
-//      {nick: "admin", victories: 220, games: 318},
-//      {nick: "adeus", victories: 219, games: 350},
-//      {nick: "netcan", victories: 205, games: 414},
-//      {nick: "ola", victories: 201, games: 461},
-//      {nick: "Player 1", victories: 201, games: 372},
-//      {nick: "Player 2", victories: 183, games: 369},
-//      {nick: "duarte", victories: 144, games: 236} ];
+//Initial data for ranking
+let rankingData =[ 
+     {nick: "123", victories: 354, games: 627},
+     {nick: "fig", victories: 354, games: 627},
+     {nick: "a", victories: 276, games: 565},
+     {nick: "tati123", victories: 252, games: 444},
+     {nick: "admin", victories: 220, games: 318},
+     {nick: "adeus", victories: 219, games: 350},
+     {nick: "netcan", victories: 205, games: 414},
+     {nick: "ola", victories: 201, games: 461},
+     {nick: "Player 1", victories: 201, games: 372},
+     {nick: "Player 2", victories: 183, games: 369},
+     {nick: "duarte", victories: 144, games: 236} ];
 
 
 const headers = {
@@ -42,14 +43,15 @@ class Ranking{
         }
     }
      
-    // startRanking(){
-    //     fs.appendFile(RANKINGPATH, JSON.stringify(rankingData), function(err){
-    //         if(err){
-    //             console.log(err);
-    //         }
+    startRanking(){
+
+        fs.appendFile(RANKINGPATH, JSON.stringify(rankingData,null,4), function(err){
+            if(err){
+                console.log(err);
+            }
            
-    //         } )
-    // };
+            } )
+    };
         
     async  loadRanking(){
         try{
@@ -62,7 +64,7 @@ class Ranking{
     }
     async  writeToRanking(data){
         try{
-            fs.writeFile(RANKINGPATH, JSON.stringify(data));
+            fs.writeFile(RANKINGPATH, JSON.stringify(data,null,4));
         }
         catch(err){
             console.log(err);
@@ -169,7 +171,11 @@ async function updateStats(player, win){
     let rank = new Ranking();
     await rank.updateStats(player,win);
 }
+// async function startRanking(){
+//     let rank = new Ranking();
+//     await rank.startRanking();
 
+// }
 module.exports.doGetRanking = doGetRanking;
 module.exports.addPlayer = addPlayer;
 module.exports.updateStats = updateStats;

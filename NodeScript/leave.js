@@ -11,6 +11,7 @@ const headers = {
 function doLeave(request, response){
     let body='';
     let player;
+    let json = {};
     
     request
     .on('data', (chunk) =>{body+=chunk})
@@ -26,7 +27,7 @@ function doLeave(request, response){
 
             }
             response.writeHead(200,headers["plain"]);
-            response.end();
+            response.end(JSON.stringify(json));
         }
         catch(error){
             console.log(error.message);

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const ranking = require('./ranking.js');
 
 var regData = {
     users: []
@@ -44,7 +45,7 @@ function doRegister(req,res){
                                 res.end(JSON.stringify(answer) + '\n\n');
                             }else{//Nick ok but pass not
                                 var answer = {error: 'User registered with a different password'};
-                                res.writeHead(401, { 'Content-Type': "application/json", 'Access-Control-Allow-Origin': '*' });
+                                res.writeHead(400, { 'Content-Type': "application/json", 'Access-Control-Allow-Origin': '*' });
                                 res.end(JSON.stringify(answer) + '\n\n');
                             }
                         }                    
@@ -58,6 +59,9 @@ function doRegister(req,res){
                             var answer = {};
                             res.writeHead(200, { 'Content-Type': "application/json", 'Access-Control-Allow-Origin': '*' });
                             res.end(JSON.stringify(answer) + '\n\n');
+                            
+                            //Add new player to the ranking
+                            ranking.addPlayer(query["nick"]);
                         });
                     }
                 }

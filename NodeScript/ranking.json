@@ -1,1 +1,70 @@
-[{"nick":"123","victories":354,"games":627},{"nick":"fig","victories":354,"games":627},{"nick":"a","victories":276,"games":565},{"nick":"tati123","victories":252,"games":444},{"nick":"admin","victories":220,"games":318},{"nick":"adeus","victories":219,"games":350},{"nick":"netcan","victories":205,"games":414},{"nick":"Player 1","victories":202,"games":373},{"nick":"ola","victories":201,"games":461},{"nick":"Player 2","victories":183,"games":369},{"nick":"duarte","victories":144,"games":236},{"nick":"f98","victories":2,"games":2},{"nick":"mateus","victories":0,"games":0},{"nick":"mateus","victories":0,"games":0},{"nick":"fsilva","victories":0,"games":0},{"nick":"mateus","victories":0,"games":0}]
+[
+    {
+        "nick": "123",
+        "victories": 354,
+        "games": 627
+    },
+    {
+        "nick": "fig",
+        "victories": 354,
+        "games": 627
+    },
+    {
+        "nick": "a",
+        "victories": 276,
+        "games": 565
+    },
+    {
+        "nick": "tati123",
+        "victories": 252,
+        "games": 444
+    },
+    {
+        "nick": "admin",
+        "victories": 220,
+        "games": 318
+    },
+    {
+        "nick": "adeus",
+        "victories": 219,
+        "games": 350
+    },
+    {
+        "nick": "netcan",
+        "victories": 205,
+        "games": 414
+    },
+    {
+        "nick": "ola",
+        "victories": 201,
+        "games": 461
+    },
+    {
+        "nick": "Player 1",
+        "victories": 201,
+        "games": 372
+    },
+    {
+        "nick": "Player 2",
+        "victories": 183,
+        "games": 369
+    },
+    {
+        "nick": "duarte",
+        "victories": 144,
+        "games": 236
+    },
+    {
+        "nick": {
+            "nick": "l",
+            "pass": "1"
+        },
+        "victories": 0,
+        "games": 0
+    },
+    {
+        "nick": "lo",
+        "victories": 0,
+        "games": 0
+    }
+]

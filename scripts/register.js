@@ -1,11 +1,12 @@
 const urlBase = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+const myUrlBase = "http://twserver.alunos.dcc.fc.up.pt:8103/";
 var tmp;
 var isLoged=false; 
 var errorLog=false;
 
 function register(nick, pass){
 
-  const url = urlBase + "register";
+  const url = myUrlBase + "register";
   console.log(url);
   const inputData = {"nick": nick, "pass": pass};
   postData(url, inputData)
