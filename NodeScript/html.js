@@ -35,8 +35,8 @@ const headers = {
 
 async function deliver(pathName, req,resp){
     let type;
-    let path = ".." + pathName;
     let data;
+    let path = "." + pathName;
     let enconding = 'utf8';
 
     
@@ -52,7 +52,7 @@ async function deliver(pathName, req,resp){
     }
     if(pathName.endsWith('/')){
         type = 'html';
-        path = "../index.html";
+        path = "index.html";
     }
     
     

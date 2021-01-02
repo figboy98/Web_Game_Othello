@@ -1,9 +1,9 @@
 const http = require('http');
-const register = require('./register');
-const ranking = require ('./ranking');
-const join = require('./join');
-const leave = require('./leave');
-const html = require('./html');
+const register = require('./NodeScript/register');
+const ranking = require ('./NodeScript/ranking');
+const join = require('./NodeScript/join');
+const leave = require('./NodeScript/leave');
+const html = require('./NodeScript/html');
 const path = require('path');
 const url = require('url');
 
