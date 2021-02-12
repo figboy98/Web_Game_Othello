@@ -1,7 +1,8 @@
 # Web Game Othello
 
-This assignment was made for the course unit of Web Technologies of the course Master's Degree in Network and Information Systems Engineering from Faculty of Sciencs
+This assignment was made for the course unit of Web Technologies of the Integrated Master of Science in Network Engineering and Information Systems from Faculty of Sciencs
 of University of Porto.
+
 
 The project was made by Fábio Miguel Gomes Silva and Maria Eduarda Dantas
 
